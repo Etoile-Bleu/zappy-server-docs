@@ -1,0 +1,368 @@
+<!DOCTYPE HTML>
+<html lang="fr" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Tuiles et ressources - Zappy Serveur</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="architecture.html"><strong aria-hidden="true">1.</strong> Vue d'ensemble</a></li><li class="chapter-item expanded affix "><li class="part-title">Couche réseau</li><li class="chapter-item expanded "><a href="network.html"><strong aria-hidden="true">2.</strong> Le Réacteur</a></li><li class="chapter-item expanded affix "><li class="part-title">Couche protocole</li><li class="chapter-item expanded "><a href="protocol.html"><strong aria-hidden="true">3.</strong> Vue d'ensemble</a></li><li class="chapter-item expanded "><a href="protocol-ai.html"><strong aria-hidden="true">4.</strong> Protocole IA</a></li><li class="chapter-item expanded "><a href="protocol-gui-commands.html"><strong aria-hidden="true">5.</strong> Commandes GUI</a></li><li class="chapter-item expanded "><a href="protocol-gui-notifications.html"><strong aria-hidden="true">6.</strong> Notifications GUI</a></li><li class="chapter-item expanded affix "><li class="part-title">Couche domaine</li><li class="chapter-item expanded "><a href="domain.html"><strong aria-hidden="true">7.</strong> Vue d'ensemble</a></li><li class="chapter-item expanded "><a href="domain-world.html"><strong aria-hidden="true">8.</strong> Monde et système de temps</a></li><li class="chapter-item expanded "><a href="domain-map.html"><strong aria-hidden="true">9.</strong> Carte toroïdale</a></li><li class="chapter-item expanded "><a href="domain-resources.html" class="active"><strong aria-hidden="true">10.</strong> Tuiles et ressources</a></li><li class="chapter-item expanded "><a href="domain-player.html"><strong aria-hidden="true">11.</strong> Joueur</a></li><li class="chapter-item expanded "><a href="domain-team.html"><strong aria-hidden="true">12.</strong> Équipe et œuf</a></li><li class="chapter-item expanded affix "><li class="part-title">Exécution des actions</li><li class="chapter-item expanded "><a href="actions.html"><strong aria-hidden="true">13.</strong> Boucle d'exécution</a></li><li class="chapter-item expanded "><a href="actions-incantation.html"><strong aria-hidden="true">14.</strong> Incantation</a></li><li class="chapter-item expanded "><a href="actions-victory.html"><strong aria-hidden="true">15.</strong> Condition de victoire</a></li><li class="chapter-item expanded affix "><li class="part-title">Configuration</li><li class="chapter-item expanded "><a href="configuration.html"><strong aria-hidden="true">16.</strong> Arguments de la ligne de commande</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="patterns.html">Référence des patrons de conception</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Zappy Serveur</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/edit/main/book-fr/src/src/domain-resources.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="tuiles-et-ressources"><a class="header" href="#tuiles-et-ressources">Tuiles et ressources</a></h1>
+<p>Sources :
+<a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/blob/main/server/src/world/resource.rs"><code>server/src/world/resource.rs</code></a>,
+<a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/blob/main/server/src/world/tile.rs"><code>server/src/world/tile.rs</code></a>,
+<a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/blob/main/server/src/world/resource_spawner.rs"><code>server/src/world/resource_spawner.rs</code></a></p>
+<h2 id="types-de-ressources"><a class="header" href="#types-de-ressources">Types de ressources</a></h2>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum ResourceKind {
+    Food, Linemate, Deraumere, Sibur, Mendiane, Phiras, Thystame,
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>Copy</code> est dérivé car l'enum n'a pas de champs alloués sur le tas ; passer par valeur
+est moins coûteux que passer une référence pour un type d'1 octet.</p>
+<p><code>ResourceKind</code> était initialement défini dans la couche protocole aux côtés de son
+encodage d'index réseau. Il a été déplacé dans <code>world/resource.rs</code> pour que la
+direction des dépendances soit correcte : la couche protocole importe du domaine,
+jamais l'inverse.</p>
+<h2 id="struct-resources"><a class="header" href="#struct-resources">Struct Resources</a></h2>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Debug, Default, Clone, PartialEq)]
+pub struct Resources {
+    pub food: u32,
+    pub linemate: u32,
+    pub deraumere: u32,
+    pub sibur: u32,
+    pub mendiane: u32,
+    pub phiras: u32,
+    pub thystame: u32,
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>Resources</code> est utilisé à la fois pour le contenu des tuiles (ce qui se trouve au
+sol) et les inventaires des joueurs (ce qu'un drone transporte). <code>Default</code> donne
+tout-zéro, l'état initial correct pour une tuile vide ou un joueur fraîchement créé.</p>
+<h3 id="méthodes"><a class="header" href="#méthodes">Méthodes</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Méthode</th><th>Signature</th><th>Objectif</th></tr></thead><tbody>
+<tr><td><code>get</code></td><td><code>(&amp;self, kind) -&gt; u32</code></td><td>Lire un champ</td></tr>
+<tr><td><code>add</code></td><td><code>(&amp;mut self, kind, amount)</code></td><td>Incrémenter un champ</td></tr>
+<tr><td><code>take</code></td><td><code>(&amp;mut self, kind, amount) -&gt; Result&lt;(), TileError&gt;</code></td><td>Décrémenter ; erreur si insuffisant</td></tr>
+<tr><td><code>has_enough</code></td><td><code>(&amp;self, required: &amp;Resources) -&gt; bool</code></td><td>Vérifier tous les champs</td></tr>
+<tr><td><code>consume</code></td><td><code>(&amp;mut self, other: &amp;Resources)</code></td><td>Soustraire tous les champs (précondition : <code>has_enough</code>)</td></tr>
+</tbody></table>
+</div>
+<h3 id="take-atomique"><a class="header" href="#take-atomique"><code>take</code> atomique</a></h3>
+<p><code>take</code> est atomique : si la quantité disponible est inférieure à <code>amount</code>, le champ
+n'est pas modifié et l'erreur porte le contexte nécessaire pour journaliser ou
+répondre sans second lookup :</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum TileError {
+    InsufficientResource { kind: ResourceKind, available: u32, needed: u32 },
+}
+<span class="boring">}</span></code></pre></pre>
+<p>C'est l'application au niveau domaine de Parse, Don't Validate : l'appelant reçoit
+une valeur qui explique l'échec, pas un booléen qui force une nouvelle vérification.</p>
+<h3 id="consume-avec-précondition"><a class="header" href="#consume-avec-précondition"><code>consume</code> avec précondition</a></h3>
+<p><code>consume</code> soustrait champ par champ sans vérifier. Il est conçu pour être appelé
+après que <code>has_enough</code> a confirmé la validité :</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Séquence de fin d'incantation :
+if tile.resources.has_enough(&amp;required) {
+    tile.resources.consume(&amp;required);  // sûr : has_enough l'a déjà confirmé
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Les builds de débogage Rust détectent les débordements arithmétiques comme des panics,
+rendant le mauvais usage immédiatement visible pendant le développement.</p>
+<h2 id="tile"><a class="header" href="#tile">Tile</a></h2>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Debug, Default)]
+pub struct Tile {
+    pub resources: Resources,
+    pub players: Vec&lt;u32&gt;,  // ids des joueurs présents ici
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Plusieurs joueurs peuvent partager une tuile ; la spécification indique que les
+Trantorisés "croisent facilement leurs congénères". <code>Default</code> produit une tuile vide.</p>
+<h2 id="générateur-de-ressources"><a class="header" href="#générateur-de-ressources">Générateur de ressources</a></h2>
+<p>Source : <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/blob/main/server/src/world/resource_spawner.rs"><code>server/src/world/resource_spawner.rs</code></a></p>
+<h3 id="table-de-densité"><a class="header" href="#table-de-densité">Table de densité</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>ResourceKind</th><th>Densité</th><th>Exemple : carte 10x10</th></tr></thead><tbody>
+<tr><td><code>Food</code></td><td>0,5</td><td>50</td></tr>
+<tr><td><code>Linemate</code></td><td>0,3</td><td>30</td></tr>
+<tr><td><code>Deraumere</code></td><td>0,15</td><td>15</td></tr>
+<tr><td><code>Sibur</code></td><td>0,1</td><td>10</td></tr>
+<tr><td><code>Mendiane</code></td><td>0,1</td><td>10</td></tr>
+<tr><td><code>Phiras</code></td><td>0,08</td><td>8</td></tr>
+<tr><td><code>Thystame</code></td><td>0,05</td><td>5</td></tr>
+</tbody></table>
+</div>
+<p>Formule : <code>max(1, floor(largeur * hauteur * densité))</code>. Le minimum de 1 garantit que
+chaque type de ressource existe toujours sur la carte, même sur une carte 1x1.</p>
+<h3 id="respawn-par-calcul-du-déficit"><a class="header" href="#respawn-par-calcul-du-déficit">Respawn par calcul du déficit</a></h3>
+<p><code>respawn</code> compte le total courant de chaque type en un seul passage sur toutes les
+tuiles, calcule le déficit et place uniquement les unités manquantes :</p>
+<pre class="mermaid">flowchart LR
+    A[&quot;Compter toutes les ressources&lt;br/&gt;sur la carte&quot;] --&gt; B[&quot;Calculer le déficit&lt;br/&gt;= cible - courant&quot;]
+    B --&gt; C{déficit &gt; 0 ?}
+    C --&gt;|oui| D[&quot;Placer les unités&lt;br/&gt;manquantes aléatoirement&quot;]
+    C --&gt;|non| E[&quot;No-op&quot;]
+    D --&gt; F[&quot;Retourner les positions&lt;br/&gt;de tuiles modifiées&quot;]
+</pre>
+<p>Cette conception est <strong>idempotente</strong> : appeler <code>respawn</code> deux fois quand la carte est
+pleine ne change rien et retourne une liste vide. Le coût total est proportionnel au
+déficit, pas à la cible complète.</p>
+<h3 id="générateur-congruentiel-linéaire"><a class="header" href="#générateur-congruentiel-linéaire">Générateur congruentiel linéaire</a></h3>
+<p><code>Rng</code> utilise les constantes LCG MMIX de Knuth (multiplicateur 6364136223846793005,
+incrément 1442695040888963407) avec arithmétique enveloppante <code>u64</code>. Deux générateurs
+avec la même graine produisent des séquences identiques, rendant les parties
+reproductibles.</p>
+<p>Les 32 bits supérieurs de chaque étape sont utilisés pour <code>next_below</code> afin
+d'exploiter les meilleures propriétés statistiques des bits de poids fort dans un LCG
+(les bits de poids faible dans un LCG standard ont des périodes plus courtes).</p>
+<p>Références :</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Linear_congruential_generator">Linear congruential generator - Wikipedia</a></li>
+<li><a href="https://www-cs-faculty.stanford.edu/~knuth/taocp.html">Knuth, The Art of Computer Programming Vol. 2, section 3.3.4</a></li>
+</ul>
+<h2 id="service-de-domaine--take_resource--drop_resource"><a class="header" href="#service-de-domaine--take_resource--drop_resource">Service de domaine : take_resource / drop_resource</a></h2>
+<p><code>take_resource</code> et <code>drop_resource</code> opèrent chacun sur une <code>Tile</code> et un <code>Player</code>
+simultanément. Placer cette logique sur l'un ou l'autre type créerait une importation
+dans le mauvais sens. Les fonctions libres sont le bon choix pour les opérations qui
+"n'appartiennent pas naturellement à un seul type" :</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>take_resource(&amp;mut tile, &amp;mut player, kind)?;  // tuile -&gt; joueur
+drop_resource(&amp;mut tile, &amp;mut player, kind)?;  // joueur -&gt; tuile
+<span class="boring">}</span></code></pre></pre>
+<p>Les deux délèguent à <code>Resources::take</code> et <code>Resources::add</code>, préservant l'atomicité
+en cas d'échec.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="domain-map.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="domain-player.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="domain-map.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="domain-player.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
+
+
+    </div>
+    </body>
+</html>

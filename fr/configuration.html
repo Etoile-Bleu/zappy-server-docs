@@ -1,0 +1,324 @@
+<!DOCTYPE HTML>
+<html lang="fr" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Arguments de la ligne de commande - Zappy Serveur</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="architecture.html"><strong aria-hidden="true">1.</strong> Vue d'ensemble</a></li><li class="chapter-item expanded affix "><li class="part-title">Couche réseau</li><li class="chapter-item expanded "><a href="network.html"><strong aria-hidden="true">2.</strong> Le Réacteur</a></li><li class="chapter-item expanded affix "><li class="part-title">Couche protocole</li><li class="chapter-item expanded "><a href="protocol.html"><strong aria-hidden="true">3.</strong> Vue d'ensemble</a></li><li class="chapter-item expanded "><a href="protocol-ai.html"><strong aria-hidden="true">4.</strong> Protocole IA</a></li><li class="chapter-item expanded "><a href="protocol-gui-commands.html"><strong aria-hidden="true">5.</strong> Commandes GUI</a></li><li class="chapter-item expanded "><a href="protocol-gui-notifications.html"><strong aria-hidden="true">6.</strong> Notifications GUI</a></li><li class="chapter-item expanded affix "><li class="part-title">Couche domaine</li><li class="chapter-item expanded "><a href="domain.html"><strong aria-hidden="true">7.</strong> Vue d'ensemble</a></li><li class="chapter-item expanded "><a href="domain-world.html"><strong aria-hidden="true">8.</strong> Monde et système de temps</a></li><li class="chapter-item expanded "><a href="domain-map.html"><strong aria-hidden="true">9.</strong> Carte toroïdale</a></li><li class="chapter-item expanded "><a href="domain-resources.html"><strong aria-hidden="true">10.</strong> Tuiles et ressources</a></li><li class="chapter-item expanded "><a href="domain-player.html"><strong aria-hidden="true">11.</strong> Joueur</a></li><li class="chapter-item expanded "><a href="domain-team.html"><strong aria-hidden="true">12.</strong> Équipe et œuf</a></li><li class="chapter-item expanded affix "><li class="part-title">Exécution des actions</li><li class="chapter-item expanded "><a href="actions.html"><strong aria-hidden="true">13.</strong> Boucle d'exécution</a></li><li class="chapter-item expanded "><a href="actions-incantation.html"><strong aria-hidden="true">14.</strong> Incantation</a></li><li class="chapter-item expanded "><a href="actions-victory.html"><strong aria-hidden="true">15.</strong> Condition de victoire</a></li><li class="chapter-item expanded affix "><li class="part-title">Configuration</li><li class="chapter-item expanded "><a href="configuration.html" class="active"><strong aria-hidden="true">16.</strong> Arguments de la ligne de commande</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="patterns.html">Référence des patrons de conception</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Zappy Serveur</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/edit/main/book-fr/src/src/configuration.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="arguments-de-la-ligne-de-commande"><a class="header" href="#arguments-de-la-ligne-de-commande">Arguments de la ligne de commande</a></h1>
+<p>Source : <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/tree/main/server/src/cli"><code>server/src/cli/</code></a></p>
+<p>Le module <code>cli</code> parse les arguments bruts de la ligne de commande en un <code>ServerArgs</code>
+typé. Il ne touche pas les sockets, l'état de jeu ou le temps. Une fois <code>ServerArgs</code>
+en main, aucune chaîne d'argument n'est jamais relue.</p>
+<h2 id="utilisation"><a class="header" href="#utilisation">Utilisation</a></h2>
+<pre><code class="language-bash">zappy_server -p port -x width -y height -n name1 name2 ... -c clientsNb -f freq
+</code></pre>
+<h2 id="référence-des-flags"><a class="header" href="#référence-des-flags">Référence des flags</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Flag</th><th>Type</th><th>Contrainte</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>-p port</code></td><td><code>u16</code></td><td>tout port valide</td><td>Port d'écoute du serveur</td></tr>
+<tr><td><code>-x width</code></td><td><code>u32</code></td><td>&gt;= 1</td><td>Largeur de la carte en tuiles</td></tr>
+<tr><td><code>-y height</code></td><td><code>u32</code></td><td>&gt;= 1</td><td>Hauteur de la carte en tuiles</td></tr>
+<tr><td><code>-n names...</code></td><td><code>Vec&lt;String&gt;</code></td><td>au moins un</td><td>Noms d'équipes (séparés par des espaces)</td></tr>
+<tr><td><code>-c clientsNb</code></td><td><code>u32</code></td><td>&gt;= 1</td><td>Nombre maximum de clients par équipe</td></tr>
+<tr><td><code>-f freq</code></td><td><code>u32</code></td><td>&gt;= 1</td><td>Unités de temps par seconde</td></tr>
+</tbody></table>
+</div>
+<p>Les flags peuvent apparaître dans n'importe quel ordre. Un flag donné deux fois prend
+sa dernière valeur (la dernière écriture gagne), cohérent avec le comportement CLI
+Unix standard.</p>
+<h2 id="serverargs"><a class="header" href="#serverargs">ServerArgs</a></h2>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct ServerArgs {
+    pub port: u16,
+    pub width: u32,
+    pub height: u32,
+    pub team_names: Vec&lt;String&gt;,
+    pub clients_per_team: u32,
+    pub freq: u32,
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Chaque champ est le plus petit type qui rejette naturellement les valeurs hors
+limites. <code>port</code> est <code>u16</code> (0-65535 par le type ; <code>99999</code> ne peut pas être stocké).
+Le <code>Vec&lt;String&gt;</code> pour les noms d'équipes est garanti non vide avant que <code>ServerArgs</code>
+soit construit.</p>
+<h2 id="patrons-de-conception"><a class="header" href="#patrons-de-conception">Patrons de conception</a></h2>
+<h3 id="parse-dont-validate"><a class="header" href="#parse-dont-validate">Parse, Don't Validate</a></h3>
+<p>Le moteur de jeu ne touche jamais une chaîne d'argument brute. Il reçoit un
+<code>ServerArgs</code> avec des champs typés. La seule frontière de parsage est
+<code>ServerArgs::from_args()</code>. Tout ce qui la franchit est soit une struct entièrement
+typée, soit une <code>ArgsError</code> typée.</p>
+<p>Référence : <a href="https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/">Parse, don't validate - Alexis King (2019)</a></p>
+<h3 id="scan-de-tokens-prédictif-ll1"><a class="header" href="#scan-de-tokens-prédictif-ll1">Scan de tokens prédictif (LL(1))</a></h3>
+<p>Les arguments sont consommés de gauche à droite avec un curseur d'index. Chaque
+token est examiné une fois : s'il commence par <code>-</code>, c'est un flag ; sinon c'est
+une valeur pour le flag courant. Pas de retour arrière. C'est le même patron LL(1)
+utilisé dans le parseur de commandes GUI, appliqué à une liste clé-valeur plate.</p>
+<h3 id="helper-générique--next_parsedt"><a class="header" href="#helper-générique--next_parsedt">Helper générique : <code>next_parsed&lt;T&gt;</code></a></h3>
+<p>Une seule fonction générique remplace ce qui serait autrement deux fonctions
+identiques <code>next_u16</code> et <code>next_u32</code> :</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn next_parsed&lt;T: FromStr&gt;(flag: &amp;str, args: &amp;[String], idx: &amp;mut usize)
+    -&gt; Result&lt;T, ArgsError&gt;
+<span class="boring">}</span></code></pre></pre>
+<p>Le paramètre de type est inféré depuis le contexte. La contrainte <code>T: FromStr</code> est
+la borne minimale et correcte : la fonction n'a besoin que d'appeler <code>str::parse::&lt;T&gt;()</code>.</p>
+<p>Référence : <a href="https://doc.rust-lang.org/std/str/trait.FromStr.html">std::str::FromStr - Rust Standard Library</a></p>
+<h3 id="le-comportement-appartient-à-son-type"><a class="header" href="#le-comportement-appartient-à-son-type">Le comportement appartient à son type</a></h3>
+<p><code>from_args</code> est une méthode constructeur sur <code>ServerArgs</code>, pas une fonction libre :</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let config = ServerArgs::from_args(&amp;raw_args)?;
+<span class="boring">}</span></code></pre></pre>
+<p>Le site d'appel se lit comme une intention. Une fonction libre <code>parse_args(&amp;raw_args)</code>
+ne dit rien sur ce qu'elle produit. La forme de méthode est auto-documentée.</p>
+<h2 id="variantes-derreur"><a class="header" href="#variantes-derreur">Variantes d'erreur</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Variante</th><th>Cause</th></tr></thead><tbody>
+<tr><td><code>UnknownFlag(String)</code></td><td>Un token <code>-x</code> n'était pas un flag reconnu</td></tr>
+<tr><td><code>MissingValue(&amp;str)</code></td><td>Un flag était présent mais aucune valeur ne suivait</td></tr>
+<tr><td><code>InvalidValue { flag, raw }</code></td><td>Une valeur n'a pas pu être parsée comme le type attendu</td></tr>
+<tr><td><code>MissingFlag(&amp;str)</code></td><td>Un flag requis était absent</td></tr>
+<tr><td><code>NoTeamNames</code></td><td><code>-n</code> était présent mais aucun nom ne suivait</td></tr>
+<tr><td><code>ZeroValue(&amp;str)</code></td><td>Un flag numérique a donné zéro</td></tr>
+</tbody></table>
+</div>
+<p>La première erreur rencontrée termine immédiatement le parsage. Il n'y a pas
+d'accumulation d'erreurs ni de succès partiel.</p>
+<h2 id="le-flag--n"><a class="header" href="#le-flag--n">Le flag <code>-n</code></a></h2>
+<p><code>-n</code> est le seul flag à longueur variable. Il collecte tous les tokens consécutifs
+qui ne commencent pas par <code>-</code> comme noms d'équipes. La collecte s'arrête au prochain
+flag ou à la fin de l'entrée :</p>
+<pre><code class="language-bash"># Deux noms d'équipes collectés, puis -c reconnu comme prochain flag
+zappy_server -n red blue -c 2 -p 4242 -x 10 -y 10 -f 100
+</code></pre>
+<p>Les noms d'équipes ne doivent pas commencer par <code>-</code>. Cela correspond à la spécification
+qui traite les noms d'équipes comme de simples identifiants.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="actions-victory.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="patterns.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="actions-victory.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="patterns.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
+
+
+    </div>
+    </body>
+</html>

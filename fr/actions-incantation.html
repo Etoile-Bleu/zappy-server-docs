@@ -1,0 +1,355 @@
+<!DOCTYPE HTML>
+<html lang="fr" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Incantation - Zappy Serveur</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="architecture.html"><strong aria-hidden="true">1.</strong> Vue d'ensemble</a></li><li class="chapter-item expanded affix "><li class="part-title">Couche réseau</li><li class="chapter-item expanded "><a href="network.html"><strong aria-hidden="true">2.</strong> Le Réacteur</a></li><li class="chapter-item expanded affix "><li class="part-title">Couche protocole</li><li class="chapter-item expanded "><a href="protocol.html"><strong aria-hidden="true">3.</strong> Vue d'ensemble</a></li><li class="chapter-item expanded "><a href="protocol-ai.html"><strong aria-hidden="true">4.</strong> Protocole IA</a></li><li class="chapter-item expanded "><a href="protocol-gui-commands.html"><strong aria-hidden="true">5.</strong> Commandes GUI</a></li><li class="chapter-item expanded "><a href="protocol-gui-notifications.html"><strong aria-hidden="true">6.</strong> Notifications GUI</a></li><li class="chapter-item expanded affix "><li class="part-title">Couche domaine</li><li class="chapter-item expanded "><a href="domain.html"><strong aria-hidden="true">7.</strong> Vue d'ensemble</a></li><li class="chapter-item expanded "><a href="domain-world.html"><strong aria-hidden="true">8.</strong> Monde et système de temps</a></li><li class="chapter-item expanded "><a href="domain-map.html"><strong aria-hidden="true">9.</strong> Carte toroïdale</a></li><li class="chapter-item expanded "><a href="domain-resources.html"><strong aria-hidden="true">10.</strong> Tuiles et ressources</a></li><li class="chapter-item expanded "><a href="domain-player.html"><strong aria-hidden="true">11.</strong> Joueur</a></li><li class="chapter-item expanded "><a href="domain-team.html"><strong aria-hidden="true">12.</strong> Équipe et œuf</a></li><li class="chapter-item expanded affix "><li class="part-title">Exécution des actions</li><li class="chapter-item expanded "><a href="actions.html"><strong aria-hidden="true">13.</strong> Boucle d'exécution</a></li><li class="chapter-item expanded "><a href="actions-incantation.html" class="active"><strong aria-hidden="true">14.</strong> Incantation</a></li><li class="chapter-item expanded "><a href="actions-victory.html"><strong aria-hidden="true">15.</strong> Condition de victoire</a></li><li class="chapter-item expanded affix "><li class="part-title">Configuration</li><li class="chapter-item expanded "><a href="configuration.html"><strong aria-hidden="true">16.</strong> Arguments de la ligne de commande</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="patterns.html">Référence des patrons de conception</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Zappy Serveur</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/edit/main/book-fr/src/src/actions-incantation.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="incantation"><a class="header" href="#incantation">Incantation</a></h1>
+<p>Sources : <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/tree/main/server/src/utils/actions/incantation"><code>server/src/utils/actions/incantation/</code></a>,
+<a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/blob/main/server/src/utils/commands/handle_ai_command.rs"><code>server/src/utils/commands/handle_ai_command.rs</code></a></p>
+<p>L'incantation est le rituel d'élévation. Un groupe de joueurs du même niveau sur
+la même tuile peut collectivement augmenter son niveau en consommant des pierres
+spécifiques. Le rituel prend 300 unités de temps (300/f secondes).</p>
+<h2 id="conception-en-deux-phases"><a class="header" href="#conception-en-deux-phases">Conception en deux phases</a></h2>
+<p>L'incantation utilise un commit en deux phases : les préconditions sont vérifiées
+immédiatement au moment de la mise en file (Phase 1), et le rituel s'exécute après
+le décompte de 300 ticks (Phase 2). Cela empêche un joueur de mettre en file une
+incantation qui n'aurait aucune chance de réussir.</p>
+<h2 id="séquence"><a class="header" href="#séquence">Séquence</a></h2>
+<pre class="mermaid">sequenceDiagram
+    participant AI as IA Initiatrice
+    participant Server as Serveur
+    participant Participants
+    participant GUI
+
+    AI-&gt;&gt;Server: Incantation
+
+    Note over Server: Phase 1 - au moment de la mise en file
+
+    Server-&gt;&gt;Server: collect_participants(world, x, y, level)
+    Server-&gt;&gt;Server: requirements_for(level)
+    alt pas assez de joueurs OU pas assez de ressources
+        Server-&gt;&gt;AI: ko
+    else préconditions remplies
+        Server-&gt;&gt;Server: mettre Incantation en file (300 ticks)
+        Server-&gt;&gt;Server: stocker ActiveIncantation { initiator, participants }
+        loop pour chaque participant
+            Server-&gt;&gt;Participants: &quot;Elevation underway\n&quot;
+            Server-&gt;&gt;Server: player.frozen = true
+        end
+        Server-&gt;&gt;GUI: pic X Y L #p1 #p2 ...
+    end
+
+    Note over Server: Phase 2 - 300 ticks plus tard
+
+    Server-&gt;&gt;Server: revérifier que les participants sont sur la tuile, même niveau
+    Server-&gt;&gt;Server: revérifier que les ressources sont toujours présentes
+
+    alt toujours valide
+        Server-&gt;&gt;Server: consommer les ressources de la tuile
+        loop pour chaque participant
+            Server-&gt;&gt;Server: player.level += 1
+            Server-&gt;&gt;Server: player.frozen = false
+            Server-&gt;&gt;Participants: &quot;Current level: N\n&quot;
+            Server-&gt;&gt;GUI: plv #n nouveau_niveau
+        end
+        Server-&gt;&gt;GUI: pie X Y 1 (succès)
+        Server-&gt;&gt;Server: check_victory()
+    else conditions plus remplies
+        loop pour chaque participant
+            Server-&gt;&gt;Participants: ko
+            Server-&gt;&gt;Server: player.frozen = false
+        end
+        Server-&gt;&gt;GUI: pie X Y 0 (échec)
+    end
+</pre>
+<h2 id="table-des-prérequis-par-niveau"><a class="header" href="#table-des-prérequis-par-niveau">Table des prérequis par niveau</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Niveau</th><th>Joueurs</th><th>linemate</th><th>deraumere</th><th>sibur</th><th>mendiane</th><th>phiras</th><th>thystame</th></tr></thead><tbody>
+<tr><td>1 -&gt; 2</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>2 -&gt; 3</td><td>2</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>3 -&gt; 4</td><td>2</td><td>2</td><td>0</td><td>1</td><td>0</td><td>2</td><td>0</td></tr>
+<tr><td>4 -&gt; 5</td><td>4</td><td>1</td><td>1</td><td>2</td><td>0</td><td>1</td><td>0</td></tr>
+<tr><td>5 -&gt; 6</td><td>4</td><td>1</td><td>2</td><td>1</td><td>3</td><td>0</td><td>0</td></tr>
+<tr><td>6 -&gt; 7</td><td>6</td><td>1</td><td>2</td><td>3</td><td>0</td><td>1</td><td>0</td></tr>
+<tr><td>7 -&gt; 8</td><td>6</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>1</td></tr>
+</tbody></table>
+</div>
+<p><code>requirements_for(level: u8) -&gt; Option&lt;LevelRequirement&gt;</code> retourne <code>None</code> pour le
+niveau 0 ou level &gt;= 8, rendant impossible d'incanter au niveau maximum.</p>
+<h2 id="collecte-des-participants"><a class="header" href="#collecte-des-participants">Collecte des participants</a></h2>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub(crate) fn collect_participants(
+    world: &amp;World,
+    x: u32,
+    y: u32,
+    level: u8,
+) -&gt; Vec&lt;PlayerId&gt; {
+    world.map.get(x, y).players.iter()
+        .filter(|&amp;&amp;pid| {
+            world.players.get(&amp;pid)
+                .is_some_and(|p| p.level == level &amp;&amp; !p.frozen)
+        })
+        .copied()
+        .collect()
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Seuls les joueurs sur la même tuile, au <strong>même niveau</strong> que l'initiateur, et
+<strong>pas déjà gelés</strong> dans une autre incantation sont éligibles. Le joueur initiant
+est toujours inclus (il est sur la tuile et pas encore gelé au moment de la
+collecte).</p>
+<h2 id="activeincantation"><a class="header" href="#activeincantation">ActiveIncantation</a></h2>
+<p>Entre la Phase 1 et la Phase 2, le monde stocke quels participants ont été verrouillés :</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct ActiveIncantation {
+    pub initiator: PlayerId,
+    pub participants: Vec&lt;PlayerId&gt;,
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>World.active_incantations: Vec&lt;ActiveIncantation&gt;</code> contient une entrée par rituel
+en cours. Au moment du déclenchement de la Phase 2, <code>incantation/mod.rs</code> supprime
+l'entrée correspondante par <code>initiator</code> et revérifie la position, le niveau et
+l'état gelé de chaque participant par rapport aux ressources actuelles de la tuile.</p>
+<h2 id="consommation-des-ressources"><a class="header" href="#consommation-des-ressources">Consommation des ressources</a></h2>
+<p><code>tile.resources.consume(&amp;req.resources)</code> soustrait toutes les pierres requises en
+un seul appel après que <code>has_enough</code> confirme leur présence. C'est une opération
+atomique : si <code>has_enough</code> retourne vrai, <code>consume</code> ne paniquera pas.</p>
+<h2 id="drapeau-de-gel"><a class="header" href="#drapeau-de-gel">Drapeau de gel</a></h2>
+<p><code>player.frozen</code> est fixé à <code>true</code> lors de la <strong>Phase 1 (moment de la mise en file)</strong>,
+immédiatement après la confirmation des conditions et la diffusion de <code>pic</code>. Cela
+empêche les participants d'exécuter de nouvelles actions pendant le décompte du
+rituel.</p>
+<p>Un joueur gelé peut toujours recevoir des commandes - elles sont tamponnées dans la
+file d'actions - mais <code>tick_action</code> n'exécute aucune action tant que <code>frozen == true</code>.
+À la fin du rituel (succès ou échec), tous les participants sont dégelés et leurs
+actions en file reprennent normalement.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="actions.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="actions-victory.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="actions.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="actions-victory.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
+
+
+    </div>
+    </body>
+</html>

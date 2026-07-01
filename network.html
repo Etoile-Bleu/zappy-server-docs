@@ -1,0 +1,411 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>The Reactor - Zappy Server</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="architecture.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="chapter-item expanded affix "><li class="part-title">Network layer</li><li class="chapter-item expanded "><a href="network.html" class="active"><strong aria-hidden="true">2.</strong> The Reactor</a></li><li class="chapter-item expanded affix "><li class="part-title">Protocol layer</li><li class="chapter-item expanded "><a href="protocol.html"><strong aria-hidden="true">3.</strong> Overview</a></li><li class="chapter-item expanded "><a href="protocol-ai.html"><strong aria-hidden="true">4.</strong> AI Protocol</a></li><li class="chapter-item expanded "><a href="protocol-gui-commands.html"><strong aria-hidden="true">5.</strong> GUI Commands</a></li><li class="chapter-item expanded "><a href="protocol-gui-notifications.html"><strong aria-hidden="true">6.</strong> GUI Notifications</a></li><li class="chapter-item expanded affix "><li class="part-title">Domain layer</li><li class="chapter-item expanded "><a href="domain.html"><strong aria-hidden="true">7.</strong> Overview</a></li><li class="chapter-item expanded "><a href="domain-world.html"><strong aria-hidden="true">8.</strong> World and Time System</a></li><li class="chapter-item expanded "><a href="domain-map.html"><strong aria-hidden="true">9.</strong> Toroidal Map</a></li><li class="chapter-item expanded "><a href="domain-resources.html"><strong aria-hidden="true">10.</strong> Tiles and Resources</a></li><li class="chapter-item expanded "><a href="domain-player.html"><strong aria-hidden="true">11.</strong> Player</a></li><li class="chapter-item expanded "><a href="domain-team.html"><strong aria-hidden="true">12.</strong> Team and Egg</a></li><li class="chapter-item expanded affix "><li class="part-title">Action execution</li><li class="chapter-item expanded "><a href="actions.html"><strong aria-hidden="true">13.</strong> Execution Loop</a></li><li class="chapter-item expanded "><a href="actions-incantation.html"><strong aria-hidden="true">14.</strong> Incantation</a></li><li class="chapter-item expanded "><a href="actions-victory.html"><strong aria-hidden="true">15.</strong> Win Condition</a></li><li class="chapter-item expanded affix "><li class="part-title">Configuration</li><li class="chapter-item expanded "><a href="configuration.html"><strong aria-hidden="true">16.</strong> CLI Arguments</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="patterns.html">Design Patterns Reference</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Zappy Server</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/edit/main/book/src/src/network.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="the-reactor"><a class="header" href="#the-reactor">The Reactor</a></h1>
+<p>The network layer is a single-threaded, non-blocking TCP event loop. It handles
+many concurrent clients without creating one thread per connection, frames
+newline-delimited commands, buffers response bytes, and drives the game clock.</p>
+<p>Source: <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/tree/main/server/src/network"><code>server/src/network/</code></a></p>
+<h2 id="the-reactor-pattern"><a class="header" href="#the-reactor-pattern">The reactor pattern</a></h2>
+<p>The <strong>Reactor</strong> pattern was formally described by Douglas Schmidt in 1995. Its
+core insight: rather than giving each I/O source its own thread, register all
+sources with a single demultiplexer and let it call the right handler when a
+source is ready.</p>
+<pre class="mermaid">flowchart TD
+    A[&quot;Register handlers&lt;br/&gt;(Listener + Clients)&quot;] --&gt; B
+    B[&quot;poll(fds, timeout)&quot;] --&gt; C{Ready?}
+    C --&gt;|&quot;readable/writable&quot;| D[&quot;Handler::on_event()&quot;]
+    C --&gt;|&quot;timeout&quot;| E[&quot;Run game ticks&quot;]
+    D --&gt; F[&quot;Apply deferred&lt;br/&gt;register/remove/stop&quot;]
+    F --&gt; B
+    E --&gt; B
+</pre>
+<p>The reactor never blocks waiting for one specific client. If client A is slow,
+clients B and C continue to be served. This is the fundamental advantage over a
+thread-per-client model for a game server with many idle spectators.</p>
+<p>References:</p>
+<ul>
+<li><a href="https://www.dre.vanderbilt.edu/~schmidt/PDF/reactor-siemens.pdf">Reactor: An Object Behavioral Pattern -- Douglas Schmidt (1995)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Reactor_pattern">Reactor Pattern -- Wikipedia</a></li>
+<li><a href="https://dzone.com/articles/understanding-reactor-pattern-thread-based-and-eve">Understanding the Reactor Pattern -- DZone</a></li>
+</ul>
+<h3 id="why-poll2-and-not-epoll-or-kqueue"><a class="header" href="#why-poll2-and-not-epoll-or-kqueue">Why <code>poll(2)</code> and not <code>epoll</code> or <code>kqueue</code>?</a></h3>
+<p><code>libc::poll</code> receives an array of <code>pollfd</code> structures and returns which
+descriptors are ready. It scans all descriptors linearly, so latency grows with
+the number of connected clients (O(n)). <code>epoll</code> (Linux) and <code>kqueue</code> (BSD/macOS)
+avoid this by maintaining a kernel-side ready list (O(1) per event).</p>
+<p>For a Zappy server with tens to low hundreds of clients, the linear scan is
+immaterial. <code>poll</code> is POSIX-standard, has a simpler API, and requires no
+platform-specific abstraction layer. The choice is deliberate: simplicity over
+premature scalability.</p>
+<p>References:</p>
+<ul>
+<li><a href="https://man7.org/linux/man-pages/man2/poll.2.html">poll(2) -- Linux man pages</a></li>
+<li><a href="https://blog.cloudflare.com/the-sad-state-of-linux-socket-balancing/">Comparing poll vs epoll -- Cloudflare Blog</a></li>
+</ul>
+<h2 id="key-types"><a class="header" href="#key-types">Key types</a></h2>
+<h3 id="token"><a class="header" href="#token"><code>Token</code></a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Token(pub usize);
+<span class="boring">}</span></code></pre></pre>
+<p>A <code>Token</code> is the reactor's stable application-level identifier for a handler.
+File descriptors are not used as identities because the OS may reuse a file
+descriptor number after a socket is closed. Tokens increase monotonically and
+are never reused, making stale references safe to detect.</p>
+<p>This is an instance of the <strong>Newtype</strong> pattern: a <code>usize</code> wearing a distinct
+type so the compiler rejects passing a player id or tile coordinate in its place.</p>
+<h3 id="interest"><a class="header" href="#interest"><code>Interest</code></a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum Interest { Read, Write, ReadWrite }
+<span class="boring">}</span></code></pre></pre>
+<p>A handler declares which readiness events it wants. A client with nothing to
+send registers <code>Read</code> only. When bytes are queued for writing, the reactor
+re-registers it as <code>ReadWrite</code> to also receive <code>POLLOUT</code> events. Returning to
+<code>Read</code> after the flush prevents a busy loop because TCP sockets are almost
+always writable.</p>
+<h3 id="handler-trait"><a class="header" href="#handler-trait"><code>Handler</code> trait</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub trait Handler {
+    fn fd(&amp;self) -&gt; RawFd;
+    fn interest(&amp;self) -&gt; Interest;
+    fn on_event(&amp;mut self, event: Event, ctx: &amp;mut ReactorContext) -&gt; io::Result&lt;()&gt;;
+    // optional capabilities with default no-op implementations:
+    fn connected_event(&amp;self, _token: Token) -&gt; Option&lt;NetworkEvent&gt; { None }
+    fn disconnected_event(&amp;self, _token: Token) -&gt; Option&lt;NetworkEvent&gt; { None }
+    fn add_res_buf(&amp;mut self, _data: &amp;[u8]) -&gt; bool { false }
+    fn flush(&amp;mut self) -&gt; NetworkResult&lt;()&gt; { Ok(()) }
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>flush</code> is called by <code>Reactor::flush_and_close</code> to drain the write buffer to the socket before the handler is deregistered. This ensures queued response bytes reach the client even when the connection is closed immediately after sending (e.g., when a team has no available slots). <code>Client</code> implements <code>flush</code> by calling <code>write_res_socket()</code> synchronously; other handlers use the default no-op.</p>
+<p>The <code>Handler</code> trait decouples the reactor from TCP-specific logic. A
+<code>TcpListener</code>, a <code>Client</code>, or a future timer pipe all slot into the same
+collection. Handlers are stored as <code>Box&lt;dyn Handler&gt;</code>, a Rust <strong>trait object</strong>:
+different concrete types share one <code>HashMap</code>, with the correct <code>on_event</code>
+selected at runtime via a vtable.</p>
+<p>References:</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/book/ch18-02-trait-objects.html">Trait Objects -- The Rust Programming Language</a></li>
+</ul>
+<h2 id="deferred-commands"><a class="header" href="#deferred-commands">Deferred commands</a></h2>
+<p>While <code>on_event</code> holds a mutable borrow of a handler, the reactor cannot be
+mutated simultaneously (Rust's borrow checker enforces this). Adding or removing
+another handler inside <code>on_event</code> would require a second mutable borrow of the
+reactor, which the compiler rejects.</p>
+<p>The solution: handlers append commands to a <code>ReactorContext</code> that the reactor
+processes after the current dispatch completes.</p>
+<pre class="mermaid">sequenceDiagram
+    participant Reactor
+    participant Handler
+    participant Ctx as ReactorContext
+
+    Reactor-&gt;&gt;Handler: on_event(event, &amp;mut ctx)
+    Handler-&gt;&gt;Ctx: ctx.register(new_handler)
+    Handler-&gt;&gt;Ctx: ctx.remove(old_token)
+    Handler--&gt;&gt;Reactor: Ok(())
+    Note over Reactor: dispatch complete
+    Reactor-&gt;&gt;Reactor: apply deferred commands
+    Reactor-&gt;&gt;Reactor: new handler registered
+    Reactor-&gt;&gt;Reactor: old handler removed
+</pre>
+<p>This pattern is a form of <strong>command queue</strong>: structural mutations are expressed
+as data, deferred until safe to apply. It is both a Rust borrowing solution and
+a design principle: handler dispatch is stable within an event-loop iteration.</p>
+<h2 id="tcp-lifecycle"><a class="header" href="#tcp-lifecycle">TCP lifecycle</a></h2>
+<pre class="mermaid">stateDiagram-v2
+    [*] --&gt; Listening: TcpListener bound to port
+    Listening --&gt; Accepting: POLLIN on listener fd
+    Accepting --&gt; Connected: accept() succeeds, WELCOME\n queued
+    Connected --&gt; ReadWrite: response queue non-empty
+    ReadWrite --&gt; Read: response queue flushed
+    Read --&gt; ReadWrite: app calls reactor.send()
+    Connected --&gt; Disconnected: EOF / POLLERR / buffer &gt; 4096B
+    ReadWrite --&gt; Disconnected: EOF / POLLERR
+    Disconnected --&gt; [*]: Client dropped, fd closed (RAII)
+</pre>
+<h3 id="line-framing"><a class="header" href="#line-framing">Line framing</a></h3>
+<p>TCP is a byte stream. One <code>read</code> call may deliver half a command, one command,
+or multiple commands concatenated. Each <code>Client</code> accumulates bytes in a
+<code>request: Vec&lt;u8&gt;</code> buffer and calls <code>next_command</code> after each read to extract
+complete lines:</p>
+<pre><code>read #1: b"forw"
+buffer:  b"forw"              -&gt; no complete line
+
+read #2: b"ard\nleft\ninv"
+buffer:  b"forward\nleft\ninv"
+  -&gt; emit "forward"
+  -&gt; emit "left"
+remaining: b"inv"
+</code></pre>
+<p>Both Unix (<code>\n</code>) and DOS (<code>\r\n</code>) line endings are accepted. Command bytes are
+forwarded to <code>app.rs</code> as raw <code>Vec&lt;u8&gt;</code> without UTF-8 conversion; the protocol
+parsers decide independently whether valid text is required.</p>
+<p>The request buffer is capped at <strong>4096 bytes</strong>. Exceeding this limit before the
+buffer drains disconnects the client, bounding memory use for misbehaving or
+hostile connections.</p>
+<h3 id="raii-and-socket-cleanup"><a class="header" href="#raii-and-socket-cleanup">RAII and socket cleanup</a></h3>
+<p>Rust's ownership model provides RAII (Resource Acquisition Is Initialization)
+for free. A <code>Client</code> owns its <code>TcpStream</code>. When the <code>Client</code> is removed from
+the reactor's <code>HashMap</code>, the <code>Drop</code> implementation closes the file descriptor
+automatically. No explicit <code>close</code> call is required, and no socket can leak.</p>
+<p>References:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization">RAII -- Wikipedia</a></li>
+<li><a href="https://doc.rust-lang.org/rust-by-example/scope/raii.html">RAII -- Rust By Example</a></li>
+</ul>
+<h2 id="game-tick-scheduling"><a class="header" href="#game-tick-scheduling">Game tick scheduling</a></h2>
+<p>The reactor uses <code>poll</code>'s timeout parameter to implement game ticks without a
+second thread. After each event-loop iteration, it computes the time remaining
+until the next tick and passes it as the <code>poll</code> timeout:</p>
+<pre><code>poll(fds, timeout_ms = millis_until_next_tick)
+</code></pre>
+<ul>
+<li>If a network event arrives first, <code>poll</code> returns early. The reactor processes
+the event, then loops back with a shorter timeout.</li>
+<li>If the tick deadline arrives first, <code>poll</code> times out. The reactor calls the
+game tick callback, advances the <code>World</code>, and loops back.</li>
+</ul>
+<p>If the server falls behind, it executes missed ticks in a catch-up loop capped
+at 50 per iteration. This prevents a severely late server from starving network
+I/O.</p>
+<pre class="mermaid">flowchart LR
+    A[&quot;Compute timeout&lt;br/&gt;= next_tick - now&quot;] --&gt; B[&quot;poll(fds, timeout)&quot;]
+    B --&gt;|&quot;I/O ready&quot;| C[&quot;Dispatch handlers&quot;]
+    B --&gt;|&quot;Timeout&quot;| D[&quot;Run game ticks&lt;br/&gt;(capped at 50)&quot;]
+    C --&gt; A
+    D --&gt; A
+</pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="architecture.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="protocol.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="architecture.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="protocol.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
+
+
+    </div>
+    </body>
+</html>

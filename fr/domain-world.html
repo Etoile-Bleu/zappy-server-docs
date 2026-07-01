@@ -1,0 +1,366 @@
+<!DOCTYPE HTML>
+<html lang="fr" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Monde et système de temps - Zappy Serveur</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="architecture.html"><strong aria-hidden="true">1.</strong> Vue d'ensemble</a></li><li class="chapter-item expanded affix "><li class="part-title">Couche réseau</li><li class="chapter-item expanded "><a href="network.html"><strong aria-hidden="true">2.</strong> Le Réacteur</a></li><li class="chapter-item expanded affix "><li class="part-title">Couche protocole</li><li class="chapter-item expanded "><a href="protocol.html"><strong aria-hidden="true">3.</strong> Vue d'ensemble</a></li><li class="chapter-item expanded "><a href="protocol-ai.html"><strong aria-hidden="true">4.</strong> Protocole IA</a></li><li class="chapter-item expanded "><a href="protocol-gui-commands.html"><strong aria-hidden="true">5.</strong> Commandes GUI</a></li><li class="chapter-item expanded "><a href="protocol-gui-notifications.html"><strong aria-hidden="true">6.</strong> Notifications GUI</a></li><li class="chapter-item expanded affix "><li class="part-title">Couche domaine</li><li class="chapter-item expanded "><a href="domain.html"><strong aria-hidden="true">7.</strong> Vue d'ensemble</a></li><li class="chapter-item expanded "><a href="domain-world.html" class="active"><strong aria-hidden="true">8.</strong> Monde et système de temps</a></li><li class="chapter-item expanded "><a href="domain-map.html"><strong aria-hidden="true">9.</strong> Carte toroïdale</a></li><li class="chapter-item expanded "><a href="domain-resources.html"><strong aria-hidden="true">10.</strong> Tuiles et ressources</a></li><li class="chapter-item expanded "><a href="domain-player.html"><strong aria-hidden="true">11.</strong> Joueur</a></li><li class="chapter-item expanded "><a href="domain-team.html"><strong aria-hidden="true">12.</strong> Équipe et œuf</a></li><li class="chapter-item expanded affix "><li class="part-title">Exécution des actions</li><li class="chapter-item expanded "><a href="actions.html"><strong aria-hidden="true">13.</strong> Boucle d'exécution</a></li><li class="chapter-item expanded "><a href="actions-incantation.html"><strong aria-hidden="true">14.</strong> Incantation</a></li><li class="chapter-item expanded "><a href="actions-victory.html"><strong aria-hidden="true">15.</strong> Condition de victoire</a></li><li class="chapter-item expanded affix "><li class="part-title">Configuration</li><li class="chapter-item expanded "><a href="configuration.html"><strong aria-hidden="true">16.</strong> Arguments de la ligne de commande</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="patterns.html">Référence des patrons de conception</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Zappy Serveur</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/edit/main/book-fr/src/src/domain-world.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="monde-et-système-de-temps"><a class="header" href="#monde-et-système-de-temps">Monde et système de temps</a></h1>
+<p>Source : <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/blob/main/server/src/world/world.rs"><code>server/src/world/world.rs</code></a></p>
+<p><code>World</code> est la racine d'agrégat de la couche domaine. Il possède tout l'état mutable
+de jeu et expose une méthode de tick unique qui pilote l'ensemble de la simulation.</p>
+<h2 id="structure"><a class="header" href="#structure">Structure</a></h2>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct World {
+    pub map: Map,
+    pub teams: Vec&lt;Team&gt;,
+    pub players: HashMap&lt;PlayerId, Player&gt;,
+    pub eggs: HashMap&lt;EggId, Egg&gt;,
+    pub active_incantations: Vec&lt;ActiveIncantation&gt;,
+    pub tick: u64,
+    pub freq: u32,
+    // privés : spawner, next_player_id, next_egg_id
+}
+
+pub struct ActiveIncantation {
+    pub initiator: PlayerId,
+    pub participants: Vec&lt;PlayerId&gt;,
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>active_incantations</code> suit les rituels d'incantation en cours entre la Phase 1
+(moment de la mise en file) et la Phase 2 (moment de l'exécution). Voir
+<a href="actions-incantation.html">Incantation</a> pour la conception complète en deux phases.</p>
+<p><code>players</code> et <code>eggs</code> utilisent <code>HashMap</code> pour une recherche en O(1) par identifiant.
+<code>teams</code> utilise <code>Vec</code> car la recherche d'équipe se fait toujours par scan de nom
+sur une petite tranche (typiquement 2-8 équipes).</p>
+<h2 id="la-boucle-de-ticks"><a class="header" href="#la-boucle-de-ticks">La boucle de ticks</a></h2>
+<pre class="mermaid">sequenceDiagram
+    participant App as app.rs
+    participant World
+    participant Player
+    participant Spawner as ResourceSpawner
+
+    App-&gt;&gt;+World: advance_tick()
+    World-&gt;&gt;World: tick += 1
+    loop pour chaque joueur
+        World-&gt;&gt;Player: tick_food()
+        alt nourriture épuisée
+            World-&gt;&gt;World: supprimer joueur de la carte + players
+            World--&gt;&gt;App: WorldEvent::PlayerStarved
+        end
+    end
+    loop pour chaque joueur survivant
+        World-&gt;&gt;Player: tick_action()
+        alt minuterie à zéro
+            World--&gt;&gt;App: WorldEvent::ActionReady { action }
+        end
+    end
+    alt tick % 20 == 0
+        World-&gt;&gt;Spawner: respawn(&amp;mut map)
+        World--&gt;&gt;App: WorldEvent::TilesUpdated { positions }
+    end
+    World--&gt;&gt;-App: Vec&lt;WorldEvent&gt;
+</pre>
+<h3 id="worldevent"><a class="header" href="#worldevent"><code>WorldEvent</code></a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum WorldEvent {
+    PlayerStarved { player_id: PlayerId },
+    ActionReady { player_id: PlayerId, action: Action },
+    TilesUpdated { positions: Vec&lt;(u32, u32)&gt; },
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>advance_tick</code> retourne les événements sous forme de données simples. Le <code>World</code>
+n'a aucune connaissance du réseau. C'est l'appelant (<code>app.rs</code>) qui envoie <code>dead\n</code>
+à un client IA affamé, diffuse <code>pdi</code> aux clients GUI, et exécute la logique de jeu
+pour une action déclenchée.</p>
+<p>Cette conception suit le principe d'<strong>architecture pilotée par les événements</strong> au
+niveau du domaine : le monde annonce ce qui s'est passé ; la couche applicative
+décide quoi en faire.</p>
+<p>Référence : <a href="https://martinfowler.com/articles/201701-event-driven.html">Event-driven architecture - Martin Fowler</a></p>
+<h2 id="patrons-de-conception"><a class="header" href="#patrons-de-conception">Patrons de conception</a></h2>
+<h3 id="propriétaire-mutable-unique"><a class="header" href="#propriétaire-mutable-unique">Propriétaire mutable unique</a></h3>
+<p>Tout l'état de jeu réside dans <code>World</code>. Pas de propriété partagée (<code>Arc</code>, <code>Mutex</code>),
+pas de canaux, pas de threads en arrière-plan. La boucle d'événements détient une
+valeur <code>World</code> et la mute en appelant <code>advance_tick</code> une fois par unité de temps.</p>
+<p>Cette approche élimine toute une classe de bugs de concurrence. Un <code>&amp;mut World</code> en
+Rust est une référence mutable exclusive ; le vérificateur d'emprunts garantit
+qu'aucun autre code ne peut lire ou écrire l'état du monde pendant qu'<code>advance_tick</code>
+s'exécute.</p>
+<h3 id="colocalisation-du-minuteur-daction"><a class="header" href="#colocalisation-du-minuteur-daction">Colocalisation du minuteur d'action</a></h3>
+<p>Chaque <code>Player</code> détient son propre <code>action_ticks_remaining: u32</code>. L'alternative
+(un <code>HashMap&lt;PlayerId, u32&gt;</code> dans <code>World</code>) nécessiterait que deux structures restent
+synchronisées à chaque suppression d'un joueur.</p>
+<p>Garder le minuteur sur le joueur rend la suppression triviale : supprimer le joueur
+de <code>world.players</code> efface automatiquement le minuteur.</p>
+<h3 id="déterminisme-du-respawn"><a class="header" href="#déterminisme-du-respawn">Déterminisme du respawn</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>if self.tick % RESPAWN_PERIOD == 0 { ... }   // déclenche à 20, 40, 60, ...
+<span class="boring">}</span></code></pre></pre>
+<p>Le respawn se déclenche aux multiples absolus de 20, pas 20 ticks après le dernier
+déclenchement. Si le serveur rattrape un retard, plusieurs respawns manqués s'exécutent
+séquentiellement mais aux numéros de tick corrects. Le comportement est déterministe
+et indépendant de l'heure murale.</p>
+<h3 id="modèle-de-créneaux-initiaux"><a class="header" href="#modèle-de-créneaux-initiaux">Modèle de créneaux initiaux</a></h3>
+<p><code>World::new</code> appelle <code>Team::new(name, 0)</code> puis <code>team.add_egg(id)</code> une fois par
+créneau client. Cela garantit que <code>available_slots</code> est toujours égal au nombre
+d'œufs sur la carte. Chaque connexion passe par le chemin <code>remove_egg</code>, qui gère
+à la fois la comptabilité des créneaux et la recherche de position de l'œuf en
+une seule opération.</p>
+<h3 id="spawnedplayer"><a class="header" href="#spawnedplayer">SpawnedPlayer</a></h3>
+<p><code>spawn_player_from_team_egg</code> retourne un <code>SpawnedPlayer</code> en cas de succès :</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct SpawnedPlayer {
+    pub player_id: PlayerId,
+    pub egg_id: EggId,
+    pub x: u32,
+    pub y: u32,
+    pub remaining_slots: u32,
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>egg_id</code> est l'identifiant de l'œuf qui a été consommé. La couche de handshake
+l'utilise pour diffuser <code>ebo #egg_id</code> aux clients GUI immédiatement après <code>pnw</code>.</p>
+<h2 id="système-de-temps"><a class="header" href="#système-de-temps">Système de temps</a></h2>
+<p>Le serveur opère en <strong>unités de temps</strong>. Une unité de temps = <code>1 / freq</code> secondes.
+Le réacteur appelle <code>advance_tick</code> une fois par unité de temps.</p>
+<div class="table-wrapper"><table><thead><tr><th>Exigence de la spécification</th><th>Implémentation</th></tr></thead><tbody>
+<tr><td>Compteur de tick global au taux <code>f/s</code></td><td><code>world.tick</code> incrémenté dans <code>advance_tick</code></td></tr>
+<tr><td>Temps d'exécution d'une action = <code>coût / f</code></td><td><code>enqueue_action</code> fixe <code>ticks = action.time_cost()</code></td></tr>
+<tr><td>Minuteur d'action par joueur</td><td><code>player.action_ticks_remaining</code> décrémenté dans <code>tick_action</code></td></tr>
+<tr><td>Décrémentation de nourriture : 1 unité par 126 unités de temps</td><td><code>tick_food</code> décrémente <code>food_ticks_remaining</code></td></tr>
+<tr><td>Respawn des ressources toutes les 20 unités de temps</td><td><code>tick % RESPAWN_PERIOD == 0</code></td></tr>
+</tbody></table>
+</div>
+<p><strong>Règle</strong> : ne jamais utiliser les secondes de l'horloge murale dans la couche domaine.
+Si un appelant a besoin de secondes, il divise par <code>freq</code> à la frontière.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="domain.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="domain-map.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="domain.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="domain-map.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
+
+
+    </div>
+    </body>
+</html>

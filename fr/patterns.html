@@ -1,0 +1,446 @@
+<!DOCTYPE HTML>
+<html lang="fr" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Référence des patrons de conception - Zappy Serveur</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="architecture.html"><strong aria-hidden="true">1.</strong> Vue d'ensemble</a></li><li class="chapter-item expanded affix "><li class="part-title">Couche réseau</li><li class="chapter-item expanded "><a href="network.html"><strong aria-hidden="true">2.</strong> Le Réacteur</a></li><li class="chapter-item expanded affix "><li class="part-title">Couche protocole</li><li class="chapter-item expanded "><a href="protocol.html"><strong aria-hidden="true">3.</strong> Vue d'ensemble</a></li><li class="chapter-item expanded "><a href="protocol-ai.html"><strong aria-hidden="true">4.</strong> Protocole IA</a></li><li class="chapter-item expanded "><a href="protocol-gui-commands.html"><strong aria-hidden="true">5.</strong> Commandes GUI</a></li><li class="chapter-item expanded "><a href="protocol-gui-notifications.html"><strong aria-hidden="true">6.</strong> Notifications GUI</a></li><li class="chapter-item expanded affix "><li class="part-title">Couche domaine</li><li class="chapter-item expanded "><a href="domain.html"><strong aria-hidden="true">7.</strong> Vue d'ensemble</a></li><li class="chapter-item expanded "><a href="domain-world.html"><strong aria-hidden="true">8.</strong> Monde et système de temps</a></li><li class="chapter-item expanded "><a href="domain-map.html"><strong aria-hidden="true">9.</strong> Carte toroïdale</a></li><li class="chapter-item expanded "><a href="domain-resources.html"><strong aria-hidden="true">10.</strong> Tuiles et ressources</a></li><li class="chapter-item expanded "><a href="domain-player.html"><strong aria-hidden="true">11.</strong> Joueur</a></li><li class="chapter-item expanded "><a href="domain-team.html"><strong aria-hidden="true">12.</strong> Équipe et œuf</a></li><li class="chapter-item expanded affix "><li class="part-title">Exécution des actions</li><li class="chapter-item expanded "><a href="actions.html"><strong aria-hidden="true">13.</strong> Boucle d'exécution</a></li><li class="chapter-item expanded "><a href="actions-incantation.html"><strong aria-hidden="true">14.</strong> Incantation</a></li><li class="chapter-item expanded "><a href="actions-victory.html"><strong aria-hidden="true">15.</strong> Condition de victoire</a></li><li class="chapter-item expanded affix "><li class="part-title">Configuration</li><li class="chapter-item expanded "><a href="configuration.html"><strong aria-hidden="true">16.</strong> Arguments de la ligne de commande</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="patterns.html" class="active">Référence des patrons de conception</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Zappy Serveur</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/edit/main/book-fr/src/src/patterns.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="référence-des-patrons-de-conception"><a class="header" href="#référence-des-patrons-de-conception">Référence des patrons de conception</a></h1>
+<p>Ce chapitre catalogue tous les patrons de conception utilisés dans le serveur, avec
+des définitions, des justifications et des liens vers des sources faisant autorité.
+Les patrons sont ordonnés par catégorie.</p>
+<hr />
+<h2 id="patrons-architecturaux"><a class="header" href="#patrons-architecturaux">Patrons architecturaux</a></h2>
+<h3 id="architecture-hexagonale-ports-et-adaptateurs"><a class="header" href="#architecture-hexagonale-ports-et-adaptateurs">Architecture hexagonale (ports et adaptateurs)</a></h3>
+<p><strong>Ce que c'est :</strong> Le noyau applicatif (domaine) est entouré de ports (interfaces)
+et d'adaptateurs (implémentations). Le noyau ne dépend jamais de l'infrastructure.</p>
+<p><strong>Où utilisé :</strong> L'ensemble du serveur. <code>world/</code> n'importe rien depuis <code>network/</code>
+ou <code>protocol/</code>. L'encodage réseau de <code>Direction::North</code> (entier 1) se trouve
+exclusivement dans <code>protocol/gui/format/player.rs</code>.</p>
+<p><strong>Pourquoi :</strong> Le domaine peut être testé, évolué et raisonné sans aucune
+configuration réseau ou protocole. Les tests pour <code>World</code>, <code>Player</code> et <code>Map</code> ne
+nécessitent pas de socket TCP.</p>
+<p><strong>Sources :</strong></p>
+<ul>
+<li><a href="https://alistair.cockburn.us/hexagonal-architecture/">Hexagonal Architecture - Alistair Cockburn (2005)</a></li>
+<li><a href="https://herbertograca.com/2017/09/14/ports-adapters-architecture/">Ports and Adapters - Herberto Graca (2017)</a></li>
+</ul>
+<hr />
+<h3 id="noyau-fonctionnel-enveloppe-impérative"><a class="header" href="#noyau-fonctionnel-enveloppe-impérative">Noyau fonctionnel, enveloppe impérative</a></h3>
+<p><strong>Ce que c'est :</strong> Le code est divisé en un noyau interne pur (sans effets de bord)
+et une enveloppe externe impure (E/S, mutation).</p>
+<p><strong>Où utilisé :</strong> Les trois parseurs et le sérialiseur GUI sont des fonctions pures.
+<code>app.rs</code>, le réacteur et <code>utils/actions/</code> constituent l'enveloppe impérative.</p>
+<p><strong>Pourquoi :</strong> Le noyau pur est trivialement testable. L'enveloppe est petite et
+clairement délimitée. Les bugs dans la couche réseau ne peuvent pas corrompre le
+comportement du parseur.</p>
+<p><strong>Sources :</strong></p>
+<ul>
+<li><a href="https://www.destroyallsoftware.com/screencasts/catalog/functional-core-imperative-shell">Functional Core, Imperative Shell - Gary Bernhardt (2012)</a></li>
+<li><a href="http://www.javiercasas.com/articles/functional-programming-patterns-functional-core-imperative-shell/">Patterns of Functional Programming - Javier Casas</a></li>
+</ul>
+<hr />
+<h2 id="patrons-de-concurrence-et-des"><a class="header" href="#patrons-de-concurrence-et-des">Patrons de concurrence et d'E/S</a></h2>
+<h3 id="patron-réacteur"><a class="header" href="#patron-réacteur">Patron Réacteur</a></h3>
+<p><strong>Ce que c'est :</strong> Un seul thread démultiplexe les événements E/S via une facilité
+de sondage OS et dispatche chaque événement au handler enregistré.</p>
+<p><strong>Où utilisé :</strong> <code>server/src/network/reactor.rs</code>. Un réacteur gère toutes les
+connexions TCP et l'horloge de jeu.</p>
+<p><strong>Pourquoi :</strong> Évite un thread par client. Adapté à un serveur de jeu avec de
+nombreux observateurs GUI inactifs et un nombre borné de joueurs IA.</p>
+<p><strong>Sources :</strong></p>
+<ul>
+<li><a href="https://www.dre.vanderbilt.edu/~schmidt/PDF/reactor-siemens.pdf">Reactor: An Object Behavioral Pattern - Douglas Schmidt (1995)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Reactor_pattern">Reactor Pattern - Wikipedia</a></li>
+</ul>
+<hr />
+<h2 id="patrons-de-domaine-ddd"><a class="header" href="#patrons-de-domaine-ddd">Patrons de domaine (DDD)</a></h2>
+<h3 id="entité"><a class="header" href="#entité">Entité</a></h3>
+<p><strong>Ce que c'est :</strong> Un objet défini par son identité unique plutôt que par ses
+valeurs d'attributs. Deux entités avec les mêmes attributs mais des ids différents
+sont distinctes.</p>
+<p><strong>Où utilisé :</strong> <code>Player</code> (identifié par <code>PlayerId</code>). La struct du joueur a un état
+mutable ; son identité est stable à travers toutes les mutations.</p>
+<p><strong>Sources :</strong></p>
+<ul>
+<li><a href="https://martinfowler.com/bliki/EvansClassification.html">Evans Classification - Martin Fowler</a></li>
+<li><a href="https://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215">Domain-Driven Design - Eric Evans (2003)</a></li>
+</ul>
+<hr />
+<h3 id="objet-valeur"><a class="header" href="#objet-valeur">Objet valeur</a></h3>
+<p><strong>Ce que c'est :</strong> Un objet sans identité conceptuelle, défini entièrement par ses
+valeurs d'attributs. Deux objets valeur avec les mêmes attributs sont
+interchangeables.</p>
+<p><strong>Où utilisé :</strong></p>
+<ul>
+<li><code>Direction</code> (Nord/Est/Sud/Ouest - dérive <code>Copy</code>, les méthodes retournent de nouvelles valeurs)</li>
+<li><code>Resources</code> (sept compteurs - dérive <code>Default</code>, <code>Clone</code>, <code>PartialEq</code>)</li>
+<li><code>Egg</code> (position + nom d'équipe - immuable après création, supprimé plutôt que muté)</li>
+</ul>
+<p><strong>Sources :</strong></p>
+<ul>
+<li><a href="https://martinfowler.com/bliki/EvansClassification.html">Evans Classification - Martin Fowler</a></li>
+<li><a href="https://refactoring.guru/design-patterns/catalog">Value Object - refactoring.guru</a></li>
+</ul>
+<hr />
+<h3 id="racine-dagrégat"><a class="header" href="#racine-dagrégat">Racine d'agrégat</a></h3>
+<p><strong>Ce que c'est :</strong> Un ensemble d'objets de domaine accessible via un seul point
+d'entrée qui applique tous les invariants pour l'ensemble.</p>
+<p><strong>Où utilisé :</strong> <code>World</code> est la racine d'agrégat. Tout l'état de jeu (carte, joueurs,
+œufs, équipes) est accessible via une seule instance <code>World</code>. La boucle d'événements
+détient une référence mutable exclusive sur <code>World</code>.</p>
+<p><strong>Sources :</strong></p>
+<ul>
+<li><a href="https://martinfowler.com/bliki/DDD_Aggregate.html">Aggregate - Martin Fowler</a></li>
+</ul>
+<hr />
+<h3 id="service-de-domaine-fonction-libre"><a class="header" href="#service-de-domaine-fonction-libre">Service de domaine (fonction libre)</a></h3>
+<p><strong>Ce que c'est :</strong> Une opération qui n'appartient naturellement à aucune entité ou
+objet valeur unique, implémentée comme une fonction libre.</p>
+<p><strong>Où utilisé :</strong> <code>take_resource(tile, player, kind)</code> et
+<code>drop_resource(tile, player, kind)</code> opèrent sur une <code>Tile</code> et un <code>Player</code>
+simultanément. Placer cette logique sur l'un ou l'autre type créerait une dépendance
+d'import indésirable.</p>
+<p><strong>Sources :</strong></p>
+<ul>
+<li><a href="https://www.domainlanguage.com/ddd/reference/">Domain Service - Domain-Driven Design Reference</a></li>
+</ul>
+<hr />
+<h2 id="patrons-comportementaux"><a class="header" href="#patrons-comportementaux">Patrons comportementaux</a></h2>
+<h3 id="patron-commande"><a class="header" href="#patron-commande">Patron Commande</a></h3>
+<p><strong>Ce que c'est :</strong> Une opération est encapsulée comme un objet, permettant la
+paramétrisation, la mise en file et l'exécution différée.</p>
+<p><strong>Où utilisé :</strong> L'enum <code>Action</code>. Chaque commande IA est une valeur de première
+classe stockée dans <code>ActionQueue</code>. <code>time_cost()</code> est une méthode pure sur la valeur.
+La logique d'exécution réside dans <code>utils/actions/</code>, pas dans l'action elle-même.</p>
+<p><strong>Sources :</strong></p>
+<ul>
+<li><a href="https://refactoring.guru/design-patterns/command">Command Pattern - Refactoring Guru</a></li>
+<li><a href="https://www.amazon.com/Design-Patterns-Elements-Reusable-Object-Oriented/dp/0201633612">Command - Gang of Four (1994)</a></li>
+</ul>
+<hr />
+<h2 id="patrons-de-parsage"><a class="header" href="#patrons-de-parsage">Patrons de parsage</a></h2>
+<h3 id="parse-dont-validate"><a class="header" href="#parse-dont-validate">Parse, Don't Validate</a></h3>
+<p><strong>Ce que c'est :</strong> Au lieu de valider une entrée brute et de la passer avec une
+hypothèse de confiance, la parser une fois dans un type qui rend les états invalides
+non représentables.</p>
+<p><strong>Où utilisé :</strong> Chaque parseur du serveur (<code>protocol::ai::parse</code>,
+<code>protocol::gui::parse</code>, <code>cli::ServerArgs::from_args</code>). Le moteur de jeu ne reçoit
+jamais une chaîne brute pour une commande ou un flag.</p>
+<p><strong>Sources :</strong></p>
+<ul>
+<li><a href="https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/">Parse, don't validate - Alexis King (2019)</a></li>
+<li><a href="https://deviq.com/practices/parse-dont-validate/">Parse, Don't Validate - DevIQ</a></li>
+</ul>
+<hr />
+<h3 id="parseur-prédictif-ll1"><a class="header" href="#parseur-prédictif-ll1">Parseur prédictif LL(1)</a></h3>
+<p><strong>Ce que c'est :</strong> Un parseur descendant qui lit un token de lookahead et sélectionne
+immédiatement la règle de production correcte sans retour arrière.</p>
+<p><strong>Où utilisé :</strong> <code>protocol::ai::parse</code>, <code>protocol::gui::parse</code>,
+<code>cli::ServerArgs::from_args</code>. La grammaire de chaque protocole est plate et non
+ambiguë ; un token de lookahead est toujours suffisant.</p>
+<p><strong>Sources :</strong></p>
+<ul>
+<li><a href="https://www.geeksforgeeks.org/compiler-design/classification-of-top-down-parsers/">Classification of Top Down Parsers - GeeksforGeeks</a></li>
+<li><a href="https://pages.cs.wisc.edu/~hasti/cs536/readings/Topdown.html">LL(1) grammars - UW Madison</a></li>
+</ul>
+<hr />
+<h3 id="curseur-zéro-copie"><a class="header" href="#curseur-zéro-copie">Curseur zéro-copie</a></h3>
+<p><strong>Ce que c'est :</strong> Un parseur parcourt l'entrée en avançant un pointeur de référence
+ou de tranche, sans jamais allouer une copie des octets sous-jacents.</p>
+<p><strong>Où utilisé :</strong> <code>Tokens&lt;'a&gt;</code> dans <code>protocol::ai::lexer</code> et
+<code>protocol::gui::lexer</code>. La durée de vie <code>'a</code> lie les tokens retournés au tampon
+d'entrée original.</p>
+<p><strong>Sources :</strong></p>
+<ul>
+<li><a href="https://itnext.io/rust-the-joy-of-safe-zero-copy-parsers-8c8581db8ab2">Rust: The joy of safe zero-copy parsers - ITNEXT</a></li>
+<li><a href="https://oneuptime.com/blog/post/2026-01-30-rust-zero-copy-parsers/view">How to Create Zero-Copy Parsers in Rust - OneUptime</a></li>
+</ul>
+<hr />
+<h2 id="patrons-structuraux"><a class="header" href="#patrons-structuraux">Patrons structuraux</a></h2>
+<h3 id="patron-newtype"><a class="header" href="#patron-newtype">Patron Newtype</a></h3>
+<p><strong>Ce que c'est :</strong> Une struct à un seul champ qui enveloppe un primitif pour créer
+un type distinct sans surcharge à l'exécution.</p>
+<p><strong>Où utilisé :</strong> <code>PlayerId(u32)</code>, <code>EggId(u32)</code>, <code>Token(usize)</code>. Le compilateur
+rejette le passage d'une coordonnée de tuile là où un id de joueur est attendu.</p>
+<p><strong>Sources :</strong></p>
+<ul>
+<li><a href="https://doc.rust-lang.org/rust-by-example/generics/new_types.html">New Type Idiom - Rust By Example</a></li>
+<li><a href="https://rust-unofficial.github.io/patterns/patterns/behavioural/newtype.html">Newtype - Rust Design Patterns</a></li>
+<li><a href="https://www.lurklurk.org/effective-rust/newtype.html">Item 6: Embrace the newtype pattern - Effective Rust</a></li>
+</ul>
+<hr />
+<h3 id="masquage-de-linformation-décomposition-de-parnas"><a class="header" href="#masquage-de-linformation-décomposition-de-parnas">Masquage de l'information (décomposition de Parnas)</a></h3>
+<p><strong>Ce que c'est :</strong> Un module cache les décisions de conception susceptibles de
+changer derrière une interface stable. Seule l'interface est visible ; les internes
+ne le sont pas.</p>
+<p><strong>Où utilisé :</strong> <code>format/player.rs</code> et <code>format/world.rs</code> déclarent tous leurs
+helpers <code>pub(super)</code>. Aucun code extérieur à <code>format/mod.rs</code> ne peut les appeler
+directement. L'encodage réseau pour les entiers d'orientation et les indices de
+ressources est un détail d'implémentation caché.</p>
+<p><strong>Sources :</strong></p>
+<ul>
+<li><a href="https://www.cs.cornell.edu/courses/JavaAndDS/files/infoHiding.pdf">On the criteria to be used in decomposing systems into modules - David Parnas (1972)</a></li>
+<li><a href="https://doc.rust-lang.org/reference/visibility-and-privacy.html">Visibility and privacy - The Rust Reference</a></li>
+</ul>
+<hr />
+<h2 id="gestion-de-la-mémoire-et-des-ressources"><a class="header" href="#gestion-de-la-mémoire-et-des-ressources">Gestion de la mémoire et des ressources</a></h2>
+<h3 id="raii-resource-acquisition-is-initialization"><a class="header" href="#raii-resource-acquisition-is-initialization">RAII (Resource Acquisition Is Initialization)</a></h3>
+<p><strong>Ce que c'est :</strong> Une ressource (mémoire, descripteur de fichier, socket) est liée
+à la durée de vie d'une valeur Rust. Supprimer la valeur libère la ressource.</p>
+<p><strong>Où utilisé :</strong> <code>Client</code> possède son <code>TcpStream</code>. Quand le <code>Client</code> est supprimé
+de la <code>HashMap</code> du réacteur, Rust appelle <code>Drop</code> sur le <code>TcpStream</code>, fermant
+automatiquement le descripteur de fichier. Aucun <code>close</code> explicite n'est nécessaire ;
+aucun socket ne peut fuir.</p>
+<p><strong>Sources :</strong></p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization">RAII - Wikipedia</a></li>
+<li><a href="https://doc.rust-lang.org/rust-by-example/scope/raii.html">RAII - Rust By Example</a></li>
+</ul>
+<hr />
+<h3 id="tampon-plat-stockage-2d-contigu"><a class="header" href="#tampon-plat-stockage-2d-contigu">Tampon plat (stockage 2D contigu)</a></h3>
+<p><strong>Ce que c'est :</strong> Un tableau N-dimensionnel stocké en un seul bloc contigu de
+mémoire, indexé par une formule arithmétique.</p>
+<p><strong>Où utilisé :</strong> <code>Map</code> stocke toutes les tuiles dans un <code>Vec&lt;Tile&gt;</code> avec la formule
+<code>index = y * largeur + x</code>. L'alternative <code>Vec&lt;Vec&lt;Tile&gt;&gt;</code> a une indirection
+supplémentaire par ligne.</p>
+<p><strong>Sources :</strong></p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Row-_and_column-major_order">Row- and column-major order - Wikipedia</a></li>
+</ul>
+<hr />
+<h2 id="génération-de-nombres-aléatoires"><a class="header" href="#génération-de-nombres-aléatoires">Génération de nombres aléatoires</a></h2>
+<h3 id="générateur-congruentiel-linéaire-lcg"><a class="header" href="#générateur-congruentiel-linéaire-lcg">Générateur congruentiel linéaire (LCG)</a></h3>
+<p><strong>Ce que c'est :</strong> Un générateur de nombres pseudo-aléatoires défini par la
+récurrence <code>X_{n+1} = (a * X_n + c) mod m</code>, où a, c, m sont des constantes
+soigneusement choisies.</p>
+<p><strong>Où utilisé :</strong> <code>world::Rng</code> utilise les constantes MMIX de Knuth. Deux générateurs
+avec la même graine produisent des séquences identiques, rendant l'initialisation
+de la carte reproductible.</p>
+<p><strong>Sources :</strong></p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Linear_congruential_generator">Linear congruential generator - Wikipedia</a></li>
+<li><a href="https://www-cs-faculty.stanford.edu/~knuth/taocp.html">Knuth, The Art of Computer Programming Vol. 2 - Stanford</a></li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="configuration.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="configuration.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
+
+
+    </div>
+    </body>
+</html>

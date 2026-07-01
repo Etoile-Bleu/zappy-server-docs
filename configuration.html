@@ -1,0 +1,322 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>CLI Arguments - Zappy Server</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="architecture.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="chapter-item expanded affix "><li class="part-title">Network layer</li><li class="chapter-item expanded "><a href="network.html"><strong aria-hidden="true">2.</strong> The Reactor</a></li><li class="chapter-item expanded affix "><li class="part-title">Protocol layer</li><li class="chapter-item expanded "><a href="protocol.html"><strong aria-hidden="true">3.</strong> Overview</a></li><li class="chapter-item expanded "><a href="protocol-ai.html"><strong aria-hidden="true">4.</strong> AI Protocol</a></li><li class="chapter-item expanded "><a href="protocol-gui-commands.html"><strong aria-hidden="true">5.</strong> GUI Commands</a></li><li class="chapter-item expanded "><a href="protocol-gui-notifications.html"><strong aria-hidden="true">6.</strong> GUI Notifications</a></li><li class="chapter-item expanded affix "><li class="part-title">Domain layer</li><li class="chapter-item expanded "><a href="domain.html"><strong aria-hidden="true">7.</strong> Overview</a></li><li class="chapter-item expanded "><a href="domain-world.html"><strong aria-hidden="true">8.</strong> World and Time System</a></li><li class="chapter-item expanded "><a href="domain-map.html"><strong aria-hidden="true">9.</strong> Toroidal Map</a></li><li class="chapter-item expanded "><a href="domain-resources.html"><strong aria-hidden="true">10.</strong> Tiles and Resources</a></li><li class="chapter-item expanded "><a href="domain-player.html"><strong aria-hidden="true">11.</strong> Player</a></li><li class="chapter-item expanded "><a href="domain-team.html"><strong aria-hidden="true">12.</strong> Team and Egg</a></li><li class="chapter-item expanded affix "><li class="part-title">Action execution</li><li class="chapter-item expanded "><a href="actions.html"><strong aria-hidden="true">13.</strong> Execution Loop</a></li><li class="chapter-item expanded "><a href="actions-incantation.html"><strong aria-hidden="true">14.</strong> Incantation</a></li><li class="chapter-item expanded "><a href="actions-victory.html"><strong aria-hidden="true">15.</strong> Win Condition</a></li><li class="chapter-item expanded affix "><li class="part-title">Configuration</li><li class="chapter-item expanded "><a href="configuration.html" class="active"><strong aria-hidden="true">16.</strong> CLI Arguments</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="patterns.html">Design Patterns Reference</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Zappy Server</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/edit/main/book/src/src/configuration.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="cli-arguments"><a class="header" href="#cli-arguments">CLI Arguments</a></h1>
+<p>Source: <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/tree/main/server/src/cli"><code>server/src/cli/</code></a></p>
+<p>The <code>cli</code> module parses raw command-line arguments into a typed <code>ServerArgs</code>.
+It does not touch sockets, game state, or time. Once <code>ServerArgs</code> is in hand,
+no argument string is ever read again.</p>
+<h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
+<pre><code class="language-bash">zappy_server -p port -x width -y height -n name1 name2 ... -c clientsNb -f freq
+</code></pre>
+<h2 id="flag-reference"><a class="header" href="#flag-reference">Flag reference</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Flag</th><th>Type</th><th>Constraint</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>-p port</code></td><td><code>u16</code></td><td>any valid port</td><td>Port the server listens on</td></tr>
+<tr><td><code>-x width</code></td><td><code>u32</code></td><td>&gt;= 1</td><td>Map width in tiles</td></tr>
+<tr><td><code>-y height</code></td><td><code>u32</code></td><td>&gt;= 1</td><td>Map height in tiles</td></tr>
+<tr><td><code>-n names...</code></td><td><code>Vec&lt;String&gt;</code></td><td>at least one</td><td>Team names (space-separated)</td></tr>
+<tr><td><code>-c clientsNb</code></td><td><code>u32</code></td><td>&gt;= 1</td><td>Maximum clients per team</td></tr>
+<tr><td><code>-f freq</code></td><td><code>u32</code></td><td>&gt;= 1</td><td>Time units per second</td></tr>
+</tbody></table>
+</div>
+<p>Flags may appear in any order. A flag given twice takes its last value (last
+write wins), consistent with standard Unix CLI behavior.</p>
+<h2 id="serverargs"><a class="header" href="#serverargs">ServerArgs</a></h2>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct ServerArgs {
+    pub port: u16,
+    pub width: u32,
+    pub height: u32,
+    pub team_names: Vec&lt;String&gt;,
+    pub clients_per_team: u32,
+    pub freq: u32,
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Every field is the smallest type that naturally rejects out-of-range values.
+<code>port</code> is <code>u16</code> (0-65535 by the type; <code>99999</code> cannot be stored). The
+<code>Vec&lt;String&gt;</code> for team names is guaranteed non-empty before <code>ServerArgs</code> is
+constructed.</p>
+<h2 id="design-patterns"><a class="header" href="#design-patterns">Design patterns</a></h2>
+<h3 id="parse-dont-validate"><a class="header" href="#parse-dont-validate">Parse, don't validate</a></h3>
+<p>The game engine never touches a raw argument string. It receives a <code>ServerArgs</code>
+with typed fields. The single parse boundary is <code>ServerArgs::from_args()</code>.
+Everything that crosses it is either a fully typed struct or a typed <code>ArgsError</code>.</p>
+<p>Reference: <a href="https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/">Parse, don't validate -- Alexis King (2019)</a></p>
+<h3 id="predictive-token-scan-ll1"><a class="header" href="#predictive-token-scan-ll1">Predictive token scan (LL(1))</a></h3>
+<p>Arguments are consumed left-to-right with an index cursor. Each token is
+examined once: if it starts with <code>-</code>, it is a flag; otherwise it is a value
+for the current flag. No backtracking. This is the same LL(1) pattern used in
+the GUI command parser, applied to a flat key-value list.</p>
+<h3 id="generic-helper-next_parsedt"><a class="header" href="#generic-helper-next_parsedt">Generic helper: <code>next_parsed&lt;T&gt;</code></a></h3>
+<p>A single generic function replaces what would otherwise be two identical
+functions <code>next_u16</code> and <code>next_u32</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn next_parsed&lt;T: FromStr&gt;(flag: &amp;str, args: &amp;[String], idx: &amp;mut usize)
+    -&gt; Result&lt;T, ArgsError&gt;
+<span class="boring">}</span></code></pre></pre>
+<p>The type parameter is inferred from context. The constraint <code>T: FromStr</code> is the
+minimal and correct bound: the function only needs to call <code>str::parse::&lt;T&gt;()</code>.</p>
+<p>Reference: <a href="https://doc.rust-lang.org/std/str/trait.FromStr.html">std::str::FromStr -- Rust Standard Library</a></p>
+<h3 id="behavior-belongs-to-its-type"><a class="header" href="#behavior-belongs-to-its-type">Behavior belongs to its type</a></h3>
+<p><code>from_args</code> is a constructor method on <code>ServerArgs</code>, not a free function:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let config = ServerArgs::from_args(&amp;raw_args)?;
+<span class="boring">}</span></code></pre></pre>
+<p>The call site reads as intent. A free function <code>parse_args(&amp;raw_args)</code> says
+nothing about what it produces. The method form is self-documenting.</p>
+<h2 id="error-variants"><a class="header" href="#error-variants">Error variants</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Variant</th><th>Cause</th></tr></thead><tbody>
+<tr><td><code>UnknownFlag(String)</code></td><td>A <code>-x</code> token was not a recognized flag</td></tr>
+<tr><td><code>MissingValue(&amp;str)</code></td><td>A flag was present but no value followed</td></tr>
+<tr><td><code>InvalidValue { flag, raw }</code></td><td>A value could not be parsed as the expected type</td></tr>
+<tr><td><code>MissingFlag(&amp;str)</code></td><td>A required flag was absent</td></tr>
+<tr><td><code>NoTeamNames</code></td><td><code>-n</code> was present but no names followed</td></tr>
+<tr><td><code>ZeroValue(&amp;str)</code></td><td>A numeric flag resolved to zero</td></tr>
+</tbody></table>
+</div>
+<p>The first error encountered terminates the parse immediately. There is no
+error accumulation or partial success.</p>
+<h2 id="the--n-flag"><a class="header" href="#the--n-flag">The <code>-n</code> flag</a></h2>
+<p><code>-n</code> is the only variable-length flag. It collects all consecutive tokens that
+do not start with <code>-</code> as team names. Collection stops at the next flag or at
+end of input:</p>
+<pre><code class="language-bash"># Two team names collected, then -c recognized as the next flag
+zappy_server -n red blue -c 2 -p 4242 -x 10 -y 10 -f 100
+</code></pre>
+<p>Team names must not start with <code>-</code>. This matches the spec which treats team
+names as plain identifiers.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="actions-victory.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="patterns.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="actions-victory.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="patterns.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
+
+
+    </div>
+    </body>
+</html>

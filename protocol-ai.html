@@ -1,0 +1,352 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>AI Protocol - Zappy Server</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="architecture.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="chapter-item expanded affix "><li class="part-title">Network layer</li><li class="chapter-item expanded "><a href="network.html"><strong aria-hidden="true">2.</strong> The Reactor</a></li><li class="chapter-item expanded affix "><li class="part-title">Protocol layer</li><li class="chapter-item expanded "><a href="protocol.html"><strong aria-hidden="true">3.</strong> Overview</a></li><li class="chapter-item expanded "><a href="protocol-ai.html" class="active"><strong aria-hidden="true">4.</strong> AI Protocol</a></li><li class="chapter-item expanded "><a href="protocol-gui-commands.html"><strong aria-hidden="true">5.</strong> GUI Commands</a></li><li class="chapter-item expanded "><a href="protocol-gui-notifications.html"><strong aria-hidden="true">6.</strong> GUI Notifications</a></li><li class="chapter-item expanded affix "><li class="part-title">Domain layer</li><li class="chapter-item expanded "><a href="domain.html"><strong aria-hidden="true">7.</strong> Overview</a></li><li class="chapter-item expanded "><a href="domain-world.html"><strong aria-hidden="true">8.</strong> World and Time System</a></li><li class="chapter-item expanded "><a href="domain-map.html"><strong aria-hidden="true">9.</strong> Toroidal Map</a></li><li class="chapter-item expanded "><a href="domain-resources.html"><strong aria-hidden="true">10.</strong> Tiles and Resources</a></li><li class="chapter-item expanded "><a href="domain-player.html"><strong aria-hidden="true">11.</strong> Player</a></li><li class="chapter-item expanded "><a href="domain-team.html"><strong aria-hidden="true">12.</strong> Team and Egg</a></li><li class="chapter-item expanded affix "><li class="part-title">Action execution</li><li class="chapter-item expanded "><a href="actions.html"><strong aria-hidden="true">13.</strong> Execution Loop</a></li><li class="chapter-item expanded "><a href="actions-incantation.html"><strong aria-hidden="true">14.</strong> Incantation</a></li><li class="chapter-item expanded "><a href="actions-victory.html"><strong aria-hidden="true">15.</strong> Win Condition</a></li><li class="chapter-item expanded affix "><li class="part-title">Configuration</li><li class="chapter-item expanded "><a href="configuration.html"><strong aria-hidden="true">16.</strong> CLI Arguments</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="patterns.html">Design Patterns Reference</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Zappy Server</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/edit/main/book/src/src/protocol-ai.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="ai-protocol"><a class="header" href="#ai-protocol">AI Protocol</a></h1>
+<p>Source: <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/tree/main/server/src/protocol/ai"><code>server/src/protocol/ai/</code></a></p>
+<p>The AI protocol module turns raw command lines into typed <code>AiCommand</code> values.
+It is a pure parser: it does not log, mutate state, or write to sockets. All
+decisions about what to do with a parsed command belong to <code>handle_command.rs</code>.</p>
+<h2 id="file-structure"><a class="header" href="#file-structure">File structure</a></h2>
+<pre><code>server/src/protocol/ai/
+    mod.rs       module wiring and public exports
+    command.rs   AiCommand enum
+    error.rs     ParseError enum
+    lexer.rs     Tokens cursor over the input string
+    parse.rs     parse() entry point
+</code></pre>
+<h2 id="command-reference"><a class="header" href="#command-reference">Command reference</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Wire string</th><th>Parsed value</th></tr></thead><tbody>
+<tr><td><code>Forward</code></td><td><code>AiCommand::Forward</code></td></tr>
+<tr><td><code>Right</code></td><td><code>AiCommand::Right</code></td></tr>
+<tr><td><code>Left</code></td><td><code>AiCommand::Left</code></td></tr>
+<tr><td><code>Look</code></td><td><code>AiCommand::Look</code></td></tr>
+<tr><td><code>Inventory</code></td><td><code>AiCommand::Inventory</code></td></tr>
+<tr><td><code>Broadcast text</code></td><td><code>AiCommand::Broadcast(String)</code></td></tr>
+<tr><td><code>Connect_nbr</code></td><td><code>AiCommand::ConnectNbr</code></td></tr>
+<tr><td><code>Fork</code></td><td><code>AiCommand::Fork</code></td></tr>
+<tr><td><code>Eject</code></td><td><code>AiCommand::Eject</code></td></tr>
+<tr><td><code>Take object</code></td><td><code>AiCommand::Take(ResourceKind)</code></td></tr>
+<tr><td><code>Set object</code></td><td><code>AiCommand::Set(ResourceKind)</code></td></tr>
+<tr><td><code>Incantation</code></td><td><code>AiCommand::Incantation</code></td></tr>
+</tbody></table>
+</div>
+<p>Command names are case-sensitive. <code>Forward</code> is valid; <code>forward</code> is rejected with
+<code>ParseError::UnknownCommand</code>.</p>
+<h2 id="connection-handshake"><a class="header" href="#connection-handshake">Connection handshake</a></h2>
+<p>Before a client is classified as <code>Ai</code>, it is <code>Unknown</code>. The first line it sends
+determines its type:</p>
+<pre class="mermaid">stateDiagram-v2
+    [*] --&gt; Unknown: TCP connected, WELCOME\n sent
+    Unknown --&gt; Gui: first line == &quot;GRAPHIC&quot;
+    Unknown --&gt; Ai: first line == valid team name with available slot
+    Unknown --&gt; [*]: team unknown / no slot / no egg
+    Ai --&gt; Ai: subsequent commands queued
+    Gui --&gt; Gui: GUI queries handled
+</pre>
+<p>On successful AI promotion, the server:</p>
+<ol>
+<li>Picks a random egg from the team.</li>
+<li>Spawns a <code>Player</code> at the egg's position.</li>
+<li>Registers the <code>Token -&gt; PlayerId</code> mapping in <code>State</code>.</li>
+<li>Replies with <code>remaining_slots\n</code> then <code>width height\n</code>.</li>
+<li>Broadcasts <code>pnw #id X Y O L team\n</code> to all GUI clients.</li>
+<li>Broadcasts <code>ebo #egg_id\n</code> to all GUI clients (egg hatched).</li>
+</ol>
+<p><strong>Full team:</strong> When <code>spawn_player_from_team_egg</code> returns <code>NoSlotsAvailable</code>, the
+server sends <code>0\n</code> then <code>W H\n</code> (zero slots + dimensions), flushes synchronously
+via <code>flush_and_close</code>, and disconnects the client.</p>
+<p><strong>Unknown team:</strong> The server sends <code>ko\n</code> and closes the connection immediately
+without sending slot count or dimensions.</p>
+<h2 id="design-patterns"><a class="header" href="#design-patterns">Design patterns</a></h2>
+<h3 id="ll1-predictive-parser"><a class="header" href="#ll1-predictive-parser">LL(1) predictive parser</a></h3>
+<p>The parser is an LL(1) (Left-to-right, Leftmost derivation, 1-token lookahead)
+predictive parser. It reads one token (the command name) and immediately knows
+which branch to take. The Zappy AI grammar has no ambiguity and no recursion, so
+a flat <code>match</code> on the command name is sufficient.</p>
+<pre class="mermaid">flowchart TD
+    INPUT[&quot;'Take food'&quot;] --&gt; LEXER[&quot;Tokens::next_str()&quot;]
+    LEXER --&gt; CMD{&quot;command name?&quot;}
+    CMD --&gt;|&quot;Forward&quot;| FWD[&quot;Ok(AiCommand::Forward)&quot;]
+    CMD --&gt;|&quot;Take&quot;| RES[&quot;Tokens::next_str() = food&quot;]
+    RES --&gt; KIND{&quot;ResourceKind?&quot;}
+    KIND --&gt;|&quot;food&quot;| TAKE[&quot;Ok(AiCommand::Take(Food))&quot;]
+    KIND --&gt;|&quot;diamond&quot;| ERR[&quot;Err(InvalidResource)&quot;]
+    CMD --&gt;|&quot;unknown&quot;| UNK[&quot;Err(UnknownCommand)&quot;]
+</pre>
+<p>References:</p>
+<ul>
+<li><a href="https://www.geeksforgeeks.org/compiler-design/classification-of-top-down-parsers/">Classification of Top Down Parsers -- GeeksforGeeks</a></li>
+<li><a href="https://pages.cs.wisc.edu/~hasti/cs536/readings/Topdown.html">LL(1) grammars -- UW Madison lecture notes</a></li>
+</ul>
+<h3 id="zero-copy-cursor"><a class="header" href="#zero-copy-cursor">Zero-copy cursor</a></h3>
+<p>The <code>Tokens&lt;'a&gt;</code> struct holds a <code>&amp;'a str</code> slice that shrinks as tokens are
+consumed. Returned tokens are also <code>&amp;'a str</code> slices borrowing from the original
+input. No <code>String</code> allocation occurs on the happy path.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Tokens&lt;'a&gt; { rest: &amp;'a str }
+<span class="boring">}</span></code></pre></pre>
+<p>The lifetime <code>'a</code> ties every returned token to the original input buffer. If
+the input is stack-allocated or owned by the caller, no heap allocation is
+needed to parse a complete command.</p>
+<p>References:</p>
+<ul>
+<li><a href="https://itnext.io/rust-the-joy-of-safe-zero-copy-parsers-8c8581db8ab2">Rust: The joy of safe zero-copy parsers -- ITNEXT</a></li>
+<li><a href="https://oneuptime.com/blog/post/2026-01-30-rust-zero-copy-parsers/view">How to Create Zero-Copy Parsers in Rust -- OneUptime Blog</a></li>
+</ul>
+<h3 id="error-as-data"><a class="header" href="#error-as-data">Error as data</a></h3>
+<p><code>ParseError</code> is a typed enum. Each variant encodes exactly one failure mode with
+all the context needed to act on it:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum ParseError {
+    UnknownCommand(Box&lt;str&gt;),   // the bad token for diagnostics
+    MissingArgument,
+    InvalidResource,
+    TrailingInput,
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>Box&lt;str&gt;</code> in <code>UnknownCommand</code> avoids an allocation on every valid command parse:
+the allocation only occurs when parsing has already failed. The caller uses an
+exhaustive <code>match</code> to decide the response (send <code>ko\n</code>, log, close connection)
+without re-inspecting the raw string.</p>
+<h2 id="error-handling-philosophy"><a class="header" href="#error-handling-philosophy">Error handling philosophy</a></h2>
+<p>The parser uses <code>?</code> throughout. The first error terminates the parse and
+propagates to <code>handle_command.rs</code>, which sends <code>ko\n</code> to the client and leaves
+the pending-command queue unchanged.</p>
+<p><code>unwrap()</code> and <code>expect()</code> are banned in all non-test code. Every fallible
+operation propagates its error upward. This preserves information: the caller
+can distinguish a missing argument from an unknown command and respond
+appropriately.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="protocol.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="protocol-gui-commands.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="protocol.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="protocol-gui-commands.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
+
+
+    </div>
+    </body>
+</html>

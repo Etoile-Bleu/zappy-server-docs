@@ -1,0 +1,2126 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Zappy Server</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="architecture.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="chapter-item expanded affix "><li class="part-title">Network layer</li><li class="chapter-item expanded "><a href="network.html"><strong aria-hidden="true">2.</strong> The Reactor</a></li><li class="chapter-item expanded affix "><li class="part-title">Protocol layer</li><li class="chapter-item expanded "><a href="protocol.html"><strong aria-hidden="true">3.</strong> Overview</a></li><li class="chapter-item expanded "><a href="protocol-ai.html"><strong aria-hidden="true">4.</strong> AI Protocol</a></li><li class="chapter-item expanded "><a href="protocol-gui-commands.html"><strong aria-hidden="true">5.</strong> GUI Commands</a></li><li class="chapter-item expanded "><a href="protocol-gui-notifications.html"><strong aria-hidden="true">6.</strong> GUI Notifications</a></li><li class="chapter-item expanded affix "><li class="part-title">Domain layer</li><li class="chapter-item expanded "><a href="domain.html"><strong aria-hidden="true">7.</strong> Overview</a></li><li class="chapter-item expanded "><a href="domain-world.html"><strong aria-hidden="true">8.</strong> World and Time System</a></li><li class="chapter-item expanded "><a href="domain-map.html"><strong aria-hidden="true">9.</strong> Toroidal Map</a></li><li class="chapter-item expanded "><a href="domain-resources.html"><strong aria-hidden="true">10.</strong> Tiles and Resources</a></li><li class="chapter-item expanded "><a href="domain-player.html"><strong aria-hidden="true">11.</strong> Player</a></li><li class="chapter-item expanded "><a href="domain-team.html"><strong aria-hidden="true">12.</strong> Team and Egg</a></li><li class="chapter-item expanded affix "><li class="part-title">Action execution</li><li class="chapter-item expanded "><a href="actions.html"><strong aria-hidden="true">13.</strong> Execution Loop</a></li><li class="chapter-item expanded "><a href="actions-incantation.html"><strong aria-hidden="true">14.</strong> Incantation</a></li><li class="chapter-item expanded "><a href="actions-victory.html"><strong aria-hidden="true">15.</strong> Win Condition</a></li><li class="chapter-item expanded affix "><li class="part-title">Configuration</li><li class="chapter-item expanded "><a href="configuration.html"><strong aria-hidden="true">16.</strong> CLI Arguments</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><a href="patterns.html">Design Patterns Reference</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Zappy Server</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<p>Zappy is a networked programming game where autonomous AI agents compete on a
+resource-rich 2D toroidal planet called Trantor. The server is the referee: it
+manages the simulation, enforces the wire protocol, and produces all observable
+game events.</p>
+<p>This book documents the <strong>server</strong> only. The AI client, the graphical interface,
+and the build pipeline are covered separately.</p>
+<h2 id="what-the-server-does"><a class="header" href="#what-the-server-does">What the server does</a></h2>
+<pre class="mermaid">flowchart TD
+    AI[&quot;AI Clients&lt;br/&gt;(Trantorian drones)&quot;] --&gt;|&quot;TCP / AI protocol&quot;| S[&quot;Server&quot;]
+    GUI[&quot;GUI Clients&lt;br/&gt;(observers)&quot;] --&gt;|&quot;TCP / GUI protocol&quot;| S
+    S --&gt;|&quot;ppo, pnw, bct …&quot;| GUI
+    S --&gt;|&quot;ok / ko / dead&quot;| AI
+    S --&gt;|&quot;seg team&quot;| AI
+    S --&gt;|&quot;seg team&quot;| GUI
+</pre>
+<p>The server has five responsibilities:</p>
+<ol>
+<li>
+<p><strong>Accept and classify connections.</strong> Each new TCP client is <code>Unknown</code>. Its
+first line identifies it: <code>GRAPHIC</code> promotes it to a GUI observer; a valid
+team name promotes it to an AI player and spawns a Trantorian drone from a
+team egg.</p>
+</li>
+<li>
+<p><strong>Run the simulation clock.</strong> The frequency argument <code>-f</code> sets how many time
+units elapse per second. Every time unit drives food timers, action timers,
+and periodic resource respawn.</p>
+</li>
+<li>
+<p><strong>Execute game actions.</strong> When an AI client's action timer expires, the
+server executes the action: moving a player, transferring a resource,
+launching an incantation, and so on.</p>
+</li>
+<li>
+<p><strong>Broadcast GUI notifications.</strong> After every state change, the server
+serializes a typed <code>GuiNotification</code> and sends it to every connected GUI
+client.</p>
+</li>
+<li>
+<p><strong>Enforce the win condition.</strong> When six players of the same team reach
+level 8, the server broadcasts <code>seg team_name</code> to all clients.</p>
+</li>
+</ol>
+<h2 id="how-to-navigate-this-book"><a class="header" href="#how-to-navigate-this-book">How to navigate this book</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Chapter</th><th>What you will find</th></tr></thead><tbody>
+<tr><td><a href="architecture.html">Architecture</a></td><td>Layer diagram, dependency rules, overall philosophy</td></tr>
+<tr><td><a href="network.html">Network Layer</a></td><td>Reactor pattern, TCP lifecycle, game tick scheduling</td></tr>
+<tr><td><a href="protocol.html">Protocol Layer</a></td><td>AI parser, GUI parser, GUI serializer</td></tr>
+<tr><td><a href="domain.html">Domain Layer</a></td><td>World, map, resources, player, team, and egg</td></tr>
+<tr><td><a href="actions.html">Action Execution</a></td><td>Execution loop, all commands, incantation, victory</td></tr>
+<tr><td><a href="configuration.html">Configuration</a></td><td>CLI argument parser</td></tr>
+<tr><td><a href="patterns.html">Design Patterns Reference</a></td><td>Full catalog with sources and rationale</td></tr>
+</tbody></table>
+</div>
+<h2 id="quick-start"><a class="header" href="#quick-start">Quick start</a></h2>
+<pre><code class="language-bash"># Build the server (Linux or WSL)
+cd server
+cargo build --release
+
+# Run with two teams, 6 clients each, 100 ticks/s
+./target/release/server -p 4242 -x 20 -y 20 -n red blue -c 6 -f 100
+</code></pre>
+<p>Source: <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/blob/main/server/src/main.rs"><code>server/src/main.rs</code></a>,
+<a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/blob/main/server/src/app.rs"><code>server/src/app.rs</code></a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="architecture-overview"><a class="header" href="#architecture-overview">Architecture overview</a></h1>
+<p>The server is organized into four layers. Each layer has a strict dependency
+rule: it may only import from layers below it, never above.</p>
+<pre class="mermaid">graph TB
+    subgraph &quot;Application Layer&quot;
+        APP[&quot;app.rs&lt;br/&gt;handle_command.rs&lt;br/&gt;utils/actions/&quot;]
+    end
+    subgraph &quot;Protocol Layer&quot;
+        AI[&quot;protocol::ai&lt;br/&gt;(parser)&quot;]
+        GUIP[&quot;protocol::gui&lt;br/&gt;(parser + serializer)&quot;]
+    end
+    subgraph &quot;Network Layer&quot;
+        NET[&quot;network::&lt;br/&gt;Reactor, Poll, TCP&quot;]
+    end
+    subgraph &quot;Domain Layer&quot;
+        WORLD[&quot;world::&lt;br/&gt;World, Map, Player, Team&quot;]
+        CLI[&quot;cli::&lt;br/&gt;ServerArgs&quot;]
+    end
+
+    APP --&gt; NET
+    APP --&gt; AI
+    APP --&gt; GUIP
+    APP --&gt; WORLD
+    AI --&gt; WORLD
+    GUIP --&gt; WORLD
+    NET -.-&gt;|&quot;NetworkEvent (data only)&quot;| APP
+    WORLD -.-&gt;|&quot;WorldEvent (data only)&quot;| APP
+</pre>
+<h2 id="hexagonal-architecture"><a class="header" href="#hexagonal-architecture">Hexagonal architecture</a></h2>
+<p>The server follows the <strong>Ports and Adapters</strong> pattern introduced by Alistair
+Cockburn in 2005. The central idea: the domain should be independent of the
+delivery mechanism. Whether the outside world communicates through TCP, a test
+harness, or a future RPC layer, the <code>World</code> struct and its invariants remain
+unchanged.</p>
+<p><strong>Ports</strong> are the boundary interfaces:</p>
+<ul>
+<li>Inbound: <code>NetworkEvent</code> (raw bytes from clients), <code>WorldEvent</code> (timer expiry, starvation)</li>
+<li>Outbound: <code>GuiNotification</code> (serialized and pushed to GUI clients)</li>
+</ul>
+<p><strong>Adapters</strong> translate between ports and the domain:</p>
+<ul>
+<li><code>protocol::ai</code> and <code>protocol::gui</code> parse raw bytes into typed commands</li>
+<li><code>protocol::gui::format</code> serializes typed notifications into wire strings</li>
+<li><code>utils/actions/</code> maps typed commands to domain mutations</li>
+</ul>
+<p>The critical rule: <code>world/</code> imports nothing from <code>protocol/</code> or <code>network/</code>.
+The wire encoding for <code>Direction::North</code> (integer <code>1</code>) lives exclusively in
+<code>protocol::gui::format::player::orientation_code</code>. The domain type carries no
+protocol knowledge.</p>
+<p>References:</p>
+<ul>
+<li><a href="https://alistair.cockburn.us/hexagonal-architecture/">Hexagonal Architecture -- Alistair Cockburn (2005)</a></li>
+<li><a href="https://herbertograca.com/2017/09/14/ports-adapters-architecture/">Ports and Adapters -- Herberto Graca (2017)</a></li>
+</ul>
+<h2 id="functional-core-imperative-shell"><a class="header" href="#functional-core-imperative-shell">Functional core, imperative shell</a></h2>
+<p>Gary Bernhardt's 2012 pattern structures code around two distinct zones:</p>
+<ul>
+<li><strong>Functional core</strong>: pure functions with no side effects. All parsers
+(<code>protocol::ai::parse</code>, <code>protocol::gui::parse</code>, <code>protocol::gui::format</code>)
+live here. Given an input, they return an output. No sockets, no state,
+no mutable globals.</li>
+<li><strong>Imperative shell</strong>: code that manages side effects. The reactor, <code>app.rs</code>,
+and <code>utils/actions/</code> live here. They mutate world state, write to sockets,
+and schedule ticks.</li>
+</ul>
+<p>This split makes the functional core trivially testable (no mocks, no setup,
+no teardown) and the imperative shell clearly bounded in scope.</p>
+<p>References:</p>
+<ul>
+<li><a href="https://www.destroyallsoftware.com/screencasts/catalog/functional-core-imperative-shell">Functional Core, Imperative Shell -- Gary Bernhardt (2012)</a></li>
+<li><a href="https://medium.com/@dev.junehoe/functional-core-imperative-shell-a5d1696a4ccb">Functional Core / Imperative Shell -- Medium</a></li>
+</ul>
+<h2 id="data-flow"><a class="header" href="#data-flow">Data flow</a></h2>
+<pre class="mermaid">sequenceDiagram
+    participant TCP as TCP Socket
+    participant Reactor
+    participant App as app.rs
+    participant Parser as protocol::ai
+    participant Execute as utils/actions
+    participant World
+    participant Fmt as protocol::gui::format
+    participant GUI as GUI Clients
+
+    TCP-&gt;&gt;Reactor: bytes ready
+    Reactor-&gt;&gt;App: NetworkEvent::Command { token, data }
+    App-&gt;&gt;Parser: parse(&amp;data)
+    Parser--&gt;&gt;App: Ok(AiCommand)
+    App-&gt;&gt;World: player.enqueue_action(action)
+
+    Note over Reactor,World: ... ticks pass ...
+
+    World--&gt;&gt;App: WorldEvent::ActionReady { player_id, action }
+    App-&gt;&gt;Execute: execute(ctx, token, player_id)
+    Execute-&gt;&gt;World: mutate state
+    Execute-&gt;&gt;Fmt: format(GuiNotification::...)
+    Fmt--&gt;&gt;Execute: &quot;ppo #1 3 4 1\n&quot;
+    Execute-&gt;&gt;Reactor: reactor.send(gui_token, bytes)
+    Reactor-&gt;&gt;GUI: bytes
+</pre>
+<h2 id="module-map"><a class="header" href="#module-map">Module map</a></h2>
+<pre><code>server/src/
+  main.rs                      entry point: parse args, start reactor
+  app.rs                       composition root: GameSession, Reactor wiring, event loops
+  cli/                         CLI argument parser
+  network/
+    reactor.rs                 Reactor, Handler trait, ReactorContext
+    tcp.rs                     Client, Listener
+    send.rs                    send_line() helper
+    poll.rs, core.rs, event.rs ancillary types
+  protocol/
+    ai/                        AI command parser
+    gui/                       GUI command parser + notification serializer
+  state.rs                     client state machine (Unknown / Ai / Gui)
+  world/                       domain: map, player, team, resources, time
+  utils/
+    commands/
+      handle_command.rs        routes NetworkEvent to the right handler
+      handle_handshake.rs      Unknown → Ai / Gui promotion, initial dump
+      handle_ai_command.rs     parses AI commands, enqueues actions
+      handle_gui_command.rs    dispatches GUI queries (msz, bct, sgt, …)
+    actions/
+      mod.rs                   execute() dispatcher
+      context.rs               ActionContext struct
+      movement.rs              Forward, TurnRight, TurnLeft
+      look.rs                  Look
+      info.rs                  Inventory, ConnectNbr
+      broadcast.rs             Broadcast with K-direction
+      direction.rs             broadcast_k() and eject_k() helpers
+      eject/                   Eject + push helpers
+      fork.rs                  Fork
+      resources.rs             Take, Set
+      incantation/             Incantation + victory check
+    gui/
+      broadcast.rs             broadcast_gui(): send to all GUI tokens
+      dump.rs                  send_initial_dump() for new GUI connections
+    tick_events.rs             handle_tick_events(): PlayerStarved, ActionReady, TilesUpdated
+</code></pre>
+<h2 id="key-invariants"><a class="header" href="#key-invariants">Key invariants</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Invariant</th><th>Where enforced</th></tr></thead><tbody>
+<tr><td>Domain knows nothing about network or protocol</td><td>Compiler: no <code>use network::</code> in <code>world/</code></td></tr>
+<tr><td>Protocol parsers are pure functions</td><td>No <code>&amp;mut</code> state parameters</td></tr>
+<tr><td>A <code>Token</code> uniquely identifies one socket for the reactor's lifetime</td><td><code>Reactor</code> assigns tokens monotonically</td></tr>
+<tr><td>A player's <code>food_ticks_remaining</code> is always in [1, 126] while alive</td><td><code>Player::tick_food</code> private field</td></tr>
+<tr><td>Team <code>available_slots</code> is always non-negative</td><td><code>consume_slot</code> returns <code>Err</code> before decrementing</td></tr>
+</tbody></table>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="the-reactor"><a class="header" href="#the-reactor">The Reactor</a></h1>
+<p>The network layer is a single-threaded, non-blocking TCP event loop. It handles
+many concurrent clients without creating one thread per connection, frames
+newline-delimited commands, buffers response bytes, and drives the game clock.</p>
+<p>Source: <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/tree/main/server/src/network"><code>server/src/network/</code></a></p>
+<h2 id="the-reactor-pattern"><a class="header" href="#the-reactor-pattern">The reactor pattern</a></h2>
+<p>The <strong>Reactor</strong> pattern was formally described by Douglas Schmidt in 1995. Its
+core insight: rather than giving each I/O source its own thread, register all
+sources with a single demultiplexer and let it call the right handler when a
+source is ready.</p>
+<pre class="mermaid">flowchart TD
+    A[&quot;Register handlers&lt;br/&gt;(Listener + Clients)&quot;] --&gt; B
+    B[&quot;poll(fds, timeout)&quot;] --&gt; C{Ready?}
+    C --&gt;|&quot;readable/writable&quot;| D[&quot;Handler::on_event()&quot;]
+    C --&gt;|&quot;timeout&quot;| E[&quot;Run game ticks&quot;]
+    D --&gt; F[&quot;Apply deferred&lt;br/&gt;register/remove/stop&quot;]
+    F --&gt; B
+    E --&gt; B
+</pre>
+<p>The reactor never blocks waiting for one specific client. If client A is slow,
+clients B and C continue to be served. This is the fundamental advantage over a
+thread-per-client model for a game server with many idle spectators.</p>
+<p>References:</p>
+<ul>
+<li><a href="https://www.dre.vanderbilt.edu/~schmidt/PDF/reactor-siemens.pdf">Reactor: An Object Behavioral Pattern -- Douglas Schmidt (1995)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Reactor_pattern">Reactor Pattern -- Wikipedia</a></li>
+<li><a href="https://dzone.com/articles/understanding-reactor-pattern-thread-based-and-eve">Understanding the Reactor Pattern -- DZone</a></li>
+</ul>
+<h3 id="why-poll2-and-not-epoll-or-kqueue"><a class="header" href="#why-poll2-and-not-epoll-or-kqueue">Why <code>poll(2)</code> and not <code>epoll</code> or <code>kqueue</code>?</a></h3>
+<p><code>libc::poll</code> receives an array of <code>pollfd</code> structures and returns which
+descriptors are ready. It scans all descriptors linearly, so latency grows with
+the number of connected clients (O(n)). <code>epoll</code> (Linux) and <code>kqueue</code> (BSD/macOS)
+avoid this by maintaining a kernel-side ready list (O(1) per event).</p>
+<p>For a Zappy server with tens to low hundreds of clients, the linear scan is
+immaterial. <code>poll</code> is POSIX-standard, has a simpler API, and requires no
+platform-specific abstraction layer. The choice is deliberate: simplicity over
+premature scalability.</p>
+<p>References:</p>
+<ul>
+<li><a href="https://man7.org/linux/man-pages/man2/poll.2.html">poll(2) -- Linux man pages</a></li>
+<li><a href="https://blog.cloudflare.com/the-sad-state-of-linux-socket-balancing/">Comparing poll vs epoll -- Cloudflare Blog</a></li>
+</ul>
+<h2 id="key-types"><a class="header" href="#key-types">Key types</a></h2>
+<h3 id="token"><a class="header" href="#token"><code>Token</code></a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Token(pub usize);
+<span class="boring">}</span></code></pre></pre>
+<p>A <code>Token</code> is the reactor's stable application-level identifier for a handler.
+File descriptors are not used as identities because the OS may reuse a file
+descriptor number after a socket is closed. Tokens increase monotonically and
+are never reused, making stale references safe to detect.</p>
+<p>This is an instance of the <strong>Newtype</strong> pattern: a <code>usize</code> wearing a distinct
+type so the compiler rejects passing a player id or tile coordinate in its place.</p>
+<h3 id="interest"><a class="header" href="#interest"><code>Interest</code></a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum Interest { Read, Write, ReadWrite }
+<span class="boring">}</span></code></pre></pre>
+<p>A handler declares which readiness events it wants. A client with nothing to
+send registers <code>Read</code> only. When bytes are queued for writing, the reactor
+re-registers it as <code>ReadWrite</code> to also receive <code>POLLOUT</code> events. Returning to
+<code>Read</code> after the flush prevents a busy loop because TCP sockets are almost
+always writable.</p>
+<h3 id="handler-trait"><a class="header" href="#handler-trait"><code>Handler</code> trait</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub trait Handler {
+    fn fd(&amp;self) -&gt; RawFd;
+    fn interest(&amp;self) -&gt; Interest;
+    fn on_event(&amp;mut self, event: Event, ctx: &amp;mut ReactorContext) -&gt; io::Result&lt;()&gt;;
+    // optional capabilities with default no-op implementations:
+    fn connected_event(&amp;self, _token: Token) -&gt; Option&lt;NetworkEvent&gt; { None }
+    fn disconnected_event(&amp;self, _token: Token) -&gt; Option&lt;NetworkEvent&gt; { None }
+    fn add_res_buf(&amp;mut self, _data: &amp;[u8]) -&gt; bool { false }
+    fn flush(&amp;mut self) -&gt; NetworkResult&lt;()&gt; { Ok(()) }
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>flush</code> is called by <code>Reactor::flush_and_close</code> to drain the write buffer to the socket before the handler is deregistered. This ensures queued response bytes reach the client even when the connection is closed immediately after sending (e.g., when a team has no available slots). <code>Client</code> implements <code>flush</code> by calling <code>write_res_socket()</code> synchronously; other handlers use the default no-op.</p>
+<p>The <code>Handler</code> trait decouples the reactor from TCP-specific logic. A
+<code>TcpListener</code>, a <code>Client</code>, or a future timer pipe all slot into the same
+collection. Handlers are stored as <code>Box&lt;dyn Handler&gt;</code>, a Rust <strong>trait object</strong>:
+different concrete types share one <code>HashMap</code>, with the correct <code>on_event</code>
+selected at runtime via a vtable.</p>
+<p>References:</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/book/ch18-02-trait-objects.html">Trait Objects -- The Rust Programming Language</a></li>
+</ul>
+<h2 id="deferred-commands"><a class="header" href="#deferred-commands">Deferred commands</a></h2>
+<p>While <code>on_event</code> holds a mutable borrow of a handler, the reactor cannot be
+mutated simultaneously (Rust's borrow checker enforces this). Adding or removing
+another handler inside <code>on_event</code> would require a second mutable borrow of the
+reactor, which the compiler rejects.</p>
+<p>The solution: handlers append commands to a <code>ReactorContext</code> that the reactor
+processes after the current dispatch completes.</p>
+<pre class="mermaid">sequenceDiagram
+    participant Reactor
+    participant Handler
+    participant Ctx as ReactorContext
+
+    Reactor-&gt;&gt;Handler: on_event(event, &amp;mut ctx)
+    Handler-&gt;&gt;Ctx: ctx.register(new_handler)
+    Handler-&gt;&gt;Ctx: ctx.remove(old_token)
+    Handler--&gt;&gt;Reactor: Ok(())
+    Note over Reactor: dispatch complete
+    Reactor-&gt;&gt;Reactor: apply deferred commands
+    Reactor-&gt;&gt;Reactor: new handler registered
+    Reactor-&gt;&gt;Reactor: old handler removed
+</pre>
+<p>This pattern is a form of <strong>command queue</strong>: structural mutations are expressed
+as data, deferred until safe to apply. It is both a Rust borrowing solution and
+a design principle: handler dispatch is stable within an event-loop iteration.</p>
+<h2 id="tcp-lifecycle"><a class="header" href="#tcp-lifecycle">TCP lifecycle</a></h2>
+<pre class="mermaid">stateDiagram-v2
+    [*] --&gt; Listening: TcpListener bound to port
+    Listening --&gt; Accepting: POLLIN on listener fd
+    Accepting --&gt; Connected: accept() succeeds, WELCOME\n queued
+    Connected --&gt; ReadWrite: response queue non-empty
+    ReadWrite --&gt; Read: response queue flushed
+    Read --&gt; ReadWrite: app calls reactor.send()
+    Connected --&gt; Disconnected: EOF / POLLERR / buffer &gt; 4096B
+    ReadWrite --&gt; Disconnected: EOF / POLLERR
+    Disconnected --&gt; [*]: Client dropped, fd closed (RAII)
+</pre>
+<h3 id="line-framing"><a class="header" href="#line-framing">Line framing</a></h3>
+<p>TCP is a byte stream. One <code>read</code> call may deliver half a command, one command,
+or multiple commands concatenated. Each <code>Client</code> accumulates bytes in a
+<code>request: Vec&lt;u8&gt;</code> buffer and calls <code>next_command</code> after each read to extract
+complete lines:</p>
+<pre><code>read #1: b"forw"
+buffer:  b"forw"              -&gt; no complete line
+
+read #2: b"ard\nleft\ninv"
+buffer:  b"forward\nleft\ninv"
+  -&gt; emit "forward"
+  -&gt; emit "left"
+remaining: b"inv"
+</code></pre>
+<p>Both Unix (<code>\n</code>) and DOS (<code>\r\n</code>) line endings are accepted. Command bytes are
+forwarded to <code>app.rs</code> as raw <code>Vec&lt;u8&gt;</code> without UTF-8 conversion; the protocol
+parsers decide independently whether valid text is required.</p>
+<p>The request buffer is capped at <strong>4096 bytes</strong>. Exceeding this limit before the
+buffer drains disconnects the client, bounding memory use for misbehaving or
+hostile connections.</p>
+<h3 id="raii-and-socket-cleanup"><a class="header" href="#raii-and-socket-cleanup">RAII and socket cleanup</a></h3>
+<p>Rust's ownership model provides RAII (Resource Acquisition Is Initialization)
+for free. A <code>Client</code> owns its <code>TcpStream</code>. When the <code>Client</code> is removed from
+the reactor's <code>HashMap</code>, the <code>Drop</code> implementation closes the file descriptor
+automatically. No explicit <code>close</code> call is required, and no socket can leak.</p>
+<p>References:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization">RAII -- Wikipedia</a></li>
+<li><a href="https://doc.rust-lang.org/rust-by-example/scope/raii.html">RAII -- Rust By Example</a></li>
+</ul>
+<h2 id="game-tick-scheduling"><a class="header" href="#game-tick-scheduling">Game tick scheduling</a></h2>
+<p>The reactor uses <code>poll</code>'s timeout parameter to implement game ticks without a
+second thread. After each event-loop iteration, it computes the time remaining
+until the next tick and passes it as the <code>poll</code> timeout:</p>
+<pre><code>poll(fds, timeout_ms = millis_until_next_tick)
+</code></pre>
+<ul>
+<li>If a network event arrives first, <code>poll</code> returns early. The reactor processes
+the event, then loops back with a shorter timeout.</li>
+<li>If the tick deadline arrives first, <code>poll</code> times out. The reactor calls the
+game tick callback, advances the <code>World</code>, and loops back.</li>
+</ul>
+<p>If the server falls behind, it executes missed ticks in a catch-up loop capped
+at 50 per iteration. This prevents a severely late server from starving network
+I/O.</p>
+<pre class="mermaid">flowchart LR
+    A[&quot;Compute timeout&lt;br/&gt;= next_tick - now&quot;] --&gt; B[&quot;poll(fds, timeout)&quot;]
+    B --&gt;|&quot;I/O ready&quot;| C[&quot;Dispatch handlers&quot;]
+    B --&gt;|&quot;Timeout&quot;| D[&quot;Run game ticks&lt;br/&gt;(capped at 50)&quot;]
+    C --&gt; A
+    D --&gt; A
+</pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="protocol-layer-overview"><a class="header" href="#protocol-layer-overview">Protocol layer overview</a></h1>
+<p>The protocol layer translates between raw TCP bytes and typed Rust values. It
+has two halves that are deliberately symmetric and independent:</p>
+<pre class="mermaid">graph LR
+    subgraph &quot;Inbound (parsing)&quot;
+        AI_RAW[&quot;'Forward\n'&quot;] --&gt; AIP[&quot;protocol::ai::parse()&quot;]
+        AIP --&gt; AIT[&quot;AiCommand::Forward&quot;]
+        GUI_RAW[&quot;'bct 3 7\n'&quot;] --&gt; GUIP[&quot;protocol::gui::parse()&quot;]
+        GUIP --&gt; GUIT[&quot;GuiCommand::Bct { x: 3, y: 7 }&quot;]
+    end
+
+    subgraph &quot;Outbound (serializing)&quot;
+        NOT[&quot;GuiNotification::PlayerPosition { ... }&quot;] --&gt; FMT[&quot;protocol::gui::format()&quot;]
+        FMT --&gt; STR[&quot;'ppo #1 3 7 2\n'&quot;]
+    end
+</pre>
+<p>All three functions are <strong>pure functions</strong>: given an input, they return an
+output, mutate nothing, and cause no side effects. This makes them trivially
+testable and impossible to misuse.</p>
+<h2 id="shared-design-principles"><a class="header" href="#shared-design-principles">Shared design principles</a></h2>
+<h3 id="parse-dont-validate"><a class="header" href="#parse-dont-validate">Parse, Don't Validate</a></h3>
+<p>Coined by Alexis King in 2019, this principle states: instead of passing raw
+input alongside a trust assumption, parse it once into a type that makes invalid
+states unrepresentable.</p>
+<p>Applied throughout this layer: neither <code>app.rs</code> nor any action handler ever
+sees a raw <code>&amp;str</code>. Every value that crosses the parse boundary is either a typed
+<code>AiCommand</code> / <code>GuiCommand</code>, or a typed error. The caller cannot accidentally
+treat a tile Y-coordinate as a player id.</p>
+<p>Reference: <a href="https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/">Parse, don't validate -- Alexis King (2019)</a></p>
+<h3 id="newtype-pattern"><a class="header" href="#newtype-pattern">Newtype pattern</a></h3>
+<p><code>PlayerId(u32)</code> and <code>EggId(u32)</code> are newtypes: single-field structs that give a
+<code>u32</code> a distinct type identity. The compiler rejects passing one where the other
+is expected, at zero runtime cost.</p>
+<p>References:</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/rust-by-example/generics/new_types.html">New Type Idiom -- Rust By Example</a></li>
+<li><a href="https://rust-unofficial.github.io/patterns/patterns/behavioural/newtype.html">Newtype -- Rust Design Patterns</a></li>
+<li><a href="https://www.lurklurk.org/effective-rust/newtype.html">Item 6: Embrace the newtype pattern -- Effective Rust</a></li>
+</ul>
+<h3 id="exhaustive-pattern-matching"><a class="header" href="#exhaustive-pattern-matching">Exhaustive pattern matching</a></h3>
+<p>Rust's <code>match</code> on an enum must cover every variant. Adding a new <code>GuiNotification</code>
+variant without updating <code>format()</code> is a <strong>compile error</strong>, not a runtime
+surprise. This compiler-enforced completeness eliminates an entire category of
+protocol bugs.</p>
+<p>Reference: <a href="https://rustc-dev-guide.rust-lang.org/pat-exhaustive-checking.html">Pattern and exhaustiveness checking -- Rust Compiler Development Guide</a></p>
+<h2 id="sub-chapters"><a class="header" href="#sub-chapters">Sub-chapters</a></h2>
+<ul>
+<li><a href="protocol-ai.html">AI Protocol</a>: command parser for Trantorian drone commands</li>
+<li><a href="protocol-gui-commands.html">GUI Commands</a>: command parser for GUI observer requests</li>
+<li><a href="protocol-gui-notifications.html">GUI Notifications</a>: serializer for server-to-GUI events</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ai-protocol"><a class="header" href="#ai-protocol">AI Protocol</a></h1>
+<p>Source: <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/tree/main/server/src/protocol/ai"><code>server/src/protocol/ai/</code></a></p>
+<p>The AI protocol module turns raw command lines into typed <code>AiCommand</code> values.
+It is a pure parser: it does not log, mutate state, or write to sockets. All
+decisions about what to do with a parsed command belong to <code>handle_command.rs</code>.</p>
+<h2 id="file-structure"><a class="header" href="#file-structure">File structure</a></h2>
+<pre><code>server/src/protocol/ai/
+    mod.rs       module wiring and public exports
+    command.rs   AiCommand enum
+    error.rs     ParseError enum
+    lexer.rs     Tokens cursor over the input string
+    parse.rs     parse() entry point
+</code></pre>
+<h2 id="command-reference"><a class="header" href="#command-reference">Command reference</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Wire string</th><th>Parsed value</th></tr></thead><tbody>
+<tr><td><code>Forward</code></td><td><code>AiCommand::Forward</code></td></tr>
+<tr><td><code>Right</code></td><td><code>AiCommand::Right</code></td></tr>
+<tr><td><code>Left</code></td><td><code>AiCommand::Left</code></td></tr>
+<tr><td><code>Look</code></td><td><code>AiCommand::Look</code></td></tr>
+<tr><td><code>Inventory</code></td><td><code>AiCommand::Inventory</code></td></tr>
+<tr><td><code>Broadcast text</code></td><td><code>AiCommand::Broadcast(String)</code></td></tr>
+<tr><td><code>Connect_nbr</code></td><td><code>AiCommand::ConnectNbr</code></td></tr>
+<tr><td><code>Fork</code></td><td><code>AiCommand::Fork</code></td></tr>
+<tr><td><code>Eject</code></td><td><code>AiCommand::Eject</code></td></tr>
+<tr><td><code>Take object</code></td><td><code>AiCommand::Take(ResourceKind)</code></td></tr>
+<tr><td><code>Set object</code></td><td><code>AiCommand::Set(ResourceKind)</code></td></tr>
+<tr><td><code>Incantation</code></td><td><code>AiCommand::Incantation</code></td></tr>
+</tbody></table>
+</div>
+<p>Command names are case-sensitive. <code>Forward</code> is valid; <code>forward</code> is rejected with
+<code>ParseError::UnknownCommand</code>.</p>
+<h2 id="connection-handshake"><a class="header" href="#connection-handshake">Connection handshake</a></h2>
+<p>Before a client is classified as <code>Ai</code>, it is <code>Unknown</code>. The first line it sends
+determines its type:</p>
+<pre class="mermaid">stateDiagram-v2
+    [*] --&gt; Unknown: TCP connected, WELCOME\n sent
+    Unknown --&gt; Gui: first line == &quot;GRAPHIC&quot;
+    Unknown --&gt; Ai: first line == valid team name with available slot
+    Unknown --&gt; [*]: team unknown / no slot / no egg
+    Ai --&gt; Ai: subsequent commands queued
+    Gui --&gt; Gui: GUI queries handled
+</pre>
+<p>On successful AI promotion, the server:</p>
+<ol>
+<li>Picks a random egg from the team.</li>
+<li>Spawns a <code>Player</code> at the egg's position.</li>
+<li>Registers the <code>Token -&gt; PlayerId</code> mapping in <code>State</code>.</li>
+<li>Replies with <code>remaining_slots\n</code> then <code>width height\n</code>.</li>
+<li>Broadcasts <code>pnw #id X Y O L team\n</code> to all GUI clients.</li>
+<li>Broadcasts <code>ebo #egg_id\n</code> to all GUI clients (egg hatched).</li>
+</ol>
+<p><strong>Full team:</strong> When <code>spawn_player_from_team_egg</code> returns <code>NoSlotsAvailable</code>, the
+server sends <code>0\n</code> then <code>W H\n</code> (zero slots + dimensions), flushes synchronously
+via <code>flush_and_close</code>, and disconnects the client.</p>
+<p><strong>Unknown team:</strong> The server sends <code>ko\n</code> and closes the connection immediately
+without sending slot count or dimensions.</p>
+<h2 id="design-patterns"><a class="header" href="#design-patterns">Design patterns</a></h2>
+<h3 id="ll1-predictive-parser"><a class="header" href="#ll1-predictive-parser">LL(1) predictive parser</a></h3>
+<p>The parser is an LL(1) (Left-to-right, Leftmost derivation, 1-token lookahead)
+predictive parser. It reads one token (the command name) and immediately knows
+which branch to take. The Zappy AI grammar has no ambiguity and no recursion, so
+a flat <code>match</code> on the command name is sufficient.</p>
+<pre class="mermaid">flowchart TD
+    INPUT[&quot;'Take food'&quot;] --&gt; LEXER[&quot;Tokens::next_str()&quot;]
+    LEXER --&gt; CMD{&quot;command name?&quot;}
+    CMD --&gt;|&quot;Forward&quot;| FWD[&quot;Ok(AiCommand::Forward)&quot;]
+    CMD --&gt;|&quot;Take&quot;| RES[&quot;Tokens::next_str() = food&quot;]
+    RES --&gt; KIND{&quot;ResourceKind?&quot;}
+    KIND --&gt;|&quot;food&quot;| TAKE[&quot;Ok(AiCommand::Take(Food))&quot;]
+    KIND --&gt;|&quot;diamond&quot;| ERR[&quot;Err(InvalidResource)&quot;]
+    CMD --&gt;|&quot;unknown&quot;| UNK[&quot;Err(UnknownCommand)&quot;]
+</pre>
+<p>References:</p>
+<ul>
+<li><a href="https://www.geeksforgeeks.org/compiler-design/classification-of-top-down-parsers/">Classification of Top Down Parsers -- GeeksforGeeks</a></li>
+<li><a href="https://pages.cs.wisc.edu/~hasti/cs536/readings/Topdown.html">LL(1) grammars -- UW Madison lecture notes</a></li>
+</ul>
+<h3 id="zero-copy-cursor"><a class="header" href="#zero-copy-cursor">Zero-copy cursor</a></h3>
+<p>The <code>Tokens&lt;'a&gt;</code> struct holds a <code>&amp;'a str</code> slice that shrinks as tokens are
+consumed. Returned tokens are also <code>&amp;'a str</code> slices borrowing from the original
+input. No <code>String</code> allocation occurs on the happy path.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Tokens&lt;'a&gt; { rest: &amp;'a str }
+<span class="boring">}</span></code></pre></pre>
+<p>The lifetime <code>'a</code> ties every returned token to the original input buffer. If
+the input is stack-allocated or owned by the caller, no heap allocation is
+needed to parse a complete command.</p>
+<p>References:</p>
+<ul>
+<li><a href="https://itnext.io/rust-the-joy-of-safe-zero-copy-parsers-8c8581db8ab2">Rust: The joy of safe zero-copy parsers -- ITNEXT</a></li>
+<li><a href="https://oneuptime.com/blog/post/2026-01-30-rust-zero-copy-parsers/view">How to Create Zero-Copy Parsers in Rust -- OneUptime Blog</a></li>
+</ul>
+<h3 id="error-as-data"><a class="header" href="#error-as-data">Error as data</a></h3>
+<p><code>ParseError</code> is a typed enum. Each variant encodes exactly one failure mode with
+all the context needed to act on it:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum ParseError {
+    UnknownCommand(Box&lt;str&gt;),   // the bad token for diagnostics
+    MissingArgument,
+    InvalidResource,
+    TrailingInput,
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>Box&lt;str&gt;</code> in <code>UnknownCommand</code> avoids an allocation on every valid command parse:
+the allocation only occurs when parsing has already failed. The caller uses an
+exhaustive <code>match</code> to decide the response (send <code>ko\n</code>, log, close connection)
+without re-inspecting the raw string.</p>
+<h2 id="error-handling-philosophy"><a class="header" href="#error-handling-philosophy">Error handling philosophy</a></h2>
+<p>The parser uses <code>?</code> throughout. The first error terminates the parse and
+propagates to <code>handle_command.rs</code>, which sends <code>ko\n</code> to the client and leaves
+the pending-command queue unchanged.</p>
+<p><code>unwrap()</code> and <code>expect()</code> are banned in all non-test code. Every fallible
+operation propagates its error upward. This preserves information: the caller
+can distinguish a missing argument from an unknown command and respond
+appropriately.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="gui-commands"><a class="header" href="#gui-commands">GUI Commands</a></h1>
+<p>Source: <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/tree/main/server/src/protocol/gui"><code>server/src/protocol/gui/</code></a></p>
+<p>The GUI command parser turns raw observer requests into typed <code>GuiCommand</code>
+values. Like the AI parser, it is a pure transformer: no I/O, no state mutation,
+no side effects.</p>
+<h2 id="file-structure-1"><a class="header" href="#file-structure-1">File structure</a></h2>
+<pre><code>server/src/protocol/gui/
+    mod.rs        public re-exports
+    error.rs      ParseError enum
+    command.rs    GuiCommand enum
+    lexer.rs      Tokens struct (zero-copy cursor)
+    parse.rs      parse() entry point
+</code></pre>
+<h2 id="command-reference-1"><a class="header" href="#command-reference-1">Command reference</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Wire input</th><th>GuiCommand variant</th><th>Arguments</th></tr></thead><tbody>
+<tr><td><code>msz</code></td><td><code>Msz</code></td><td>none</td></tr>
+<tr><td><code>bct X Y</code></td><td><code>Bct { x, y }</code></td><td>two <code>u32</code></td></tr>
+<tr><td><code>mct</code></td><td><code>Mct</code></td><td>none</td></tr>
+<tr><td><code>tna</code></td><td><code>Tna</code></td><td>none</td></tr>
+<tr><td><code>ppo #n</code></td><td><code>Ppo { player_id }</code></td><td>one <code>PlayerId</code></td></tr>
+<tr><td><code>plv #n</code></td><td><code>Plv { player_id }</code></td><td>one <code>PlayerId</code></td></tr>
+<tr><td><code>pin #n</code></td><td><code>Pin { player_id }</code></td><td>one <code>PlayerId</code></td></tr>
+<tr><td><code>sgt</code></td><td><code>Sgt</code></td><td>none</td></tr>
+<tr><td><code>sst T</code></td><td><code>Sst { time_unit }</code></td><td>one <code>u32</code></td></tr>
+</tbody></table>
+</div>
+<h2 id="parsing-a-player-id"><a class="header" href="#parsing-a-player-id">Parsing a player ID</a></h2>
+<p>Player IDs on the wire are prefixed with <code>#</code>: <code>ppo #3</code> means player 3.
+<code>Tokens::next_player_id</code> strips the <code>#</code> prefix with <code>strip_prefix</code>, then parses
+the remaining digits into a <code>u32</code> wrapped in <code>PlayerId</code>. The <code>#</code> prefix is the
+wire format concern; the domain type <code>PlayerId(u32)</code> carries no <code>#</code>.</p>
+<pre class="mermaid">flowchart LR
+    RAW[&quot;'ppo #3'&quot;] --&gt; CMD[&quot;next_str() = ppo&quot;]
+    CMD --&gt; PID[&quot;next_player_id()&quot;]
+    PID --&gt; STRIP[&quot;strip_prefix('#') = 3&quot;]
+    STRIP --&gt; PARSE[&quot;parse u32 = 3&quot;]
+    PARSE --&gt; WRAP[&quot;PlayerId(3)&quot;]
+    WRAP --&gt; OK[&quot;Ok(Ppo { player_id: PlayerId(3) })&quot;]
+</pre>
+<h2 id="separation-of-lexing-and-parsing"><a class="header" href="#separation-of-lexing-and-parsing">Separation of lexing and parsing</a></h2>
+<p>Two stages are kept deliberately separate:</p>
+<ul>
+<li><strong>Lexing</strong> (<code>lexer.rs</code>): converts <code>&amp;str</code> into a stream of typed tokens via
+a zero-copy cursor. No heap allocation on the happy path.</li>
+<li><strong>Parsing</strong> (<code>parse.rs</code>): converts the token stream into a <code>GuiCommand</code>.
+The command name is the sole lookahead token.</li>
+</ul>
+<p>Adding a new command requires only two changes: a new variant in <code>GuiCommand</code>
+and a new match arm in <code>parse()</code>. The lexer never changes for new commands.</p>
+<h2 id="error-variants"><a class="header" href="#error-variants">Error variants</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Variant</th><th>Cause</th></tr></thead><tbody>
+<tr><td><code>UnknownCommand(Box&lt;str&gt;)</code></td><td>Command name not in the protocol</td></tr>
+<tr><td><code>MissingArgument</code></td><td>Input ended before all required tokens were consumed</td></tr>
+<tr><td><code>InvalidNumber</code></td><td>A <code>u32</code> token could not be parsed</td></tr>
+<tr><td><code>InvalidPlayerIdFormat</code></td><td>A player id token lacked the <code>#</code> prefix or had non-digit digits</td></tr>
+<tr><td><code>TrailingInput</code></td><td>Unconsumed non-whitespace content after all expected arguments</td></tr>
+</tbody></table>
+</div>
+<p><code>TrailingInput</code> is checked by calling <code>tokens.expect_end()</code> as the last step in
+every match arm. This rejects inputs like <code>msz extragarbage</code> that would otherwise
+silently succeed.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="gui-notifications"><a class="header" href="#gui-notifications">GUI Notifications</a></h1>
+<p>Source: <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/blob/main/server/src/protocol/gui/notification.rs"><code>server/src/protocol/gui/notification.rs</code></a>,
+<a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/tree/main/server/src/protocol/gui/format"><code>server/src/protocol/gui/format/</code></a></p>
+<p>The serializer is the outbound half of the GUI protocol. Where the parser
+converts bytes into typed commands, the serializer converts typed notifications
+into wire strings.</p>
+<h2 id="the-format-function"><a class="header" href="#the-format-function">The <code>format</code> Function</a></h2>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn format(notification: &amp;GuiNotification) -&gt; String
+<span class="boring">}</span></code></pre></pre>
+<p>A pure function: same input always produces the same output. No state, no I/O.
+The return type is <code>String</code> (never <code>Result</code>) because serializing well-typed data
+cannot fail.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let line = format(&amp;GuiNotification::MapSize { width: 10, height: 20 });
+assert_eq!(line, "msz 10 20\n");
+<span class="boring">}</span></code></pre></pre>
+<h2 id="wire-protocol-reference"><a class="header" href="#wire-protocol-reference">Wire protocol reference</a></h2>
+<h3 id="player-events"><a class="header" href="#player-events">Player events</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Variant</th><th>Wire format</th></tr></thead><tbody>
+<tr><td><code>PlayerNew</code></td><td><code>pnw #n X Y O L N\n</code></td></tr>
+<tr><td><code>PlayerPosition</code></td><td><code>ppo #n X Y O\n</code></td></tr>
+<tr><td><code>PlayerLevel</code></td><td><code>plv #n L\n</code></td></tr>
+<tr><td><code>PlayerInventory</code></td><td><code>pin #n X Y q0 q1 q2 q3 q4 q5 q6\n</code></td></tr>
+<tr><td><code>PlayerExpulsion</code></td><td><code>pex #n\n</code></td></tr>
+<tr><td><code>PlayerBroadcast</code></td><td><code>pbc #n M\n</code></td></tr>
+<tr><td><code>PlayerFork</code></td><td><code>pfk #n\n</code></td></tr>
+<tr><td><code>PlayerDropResource</code></td><td><code>pdr #n i\n</code></td></tr>
+<tr><td><code>PlayerGetResource</code></td><td><code>pgt #n i\n</code></td></tr>
+<tr><td><code>PlayerDeath</code></td><td><code>pdi #n\n</code></td></tr>
+</tbody></table>
+</div>
+<p><code>O</code> = orientation (1=North, 2=East, 3=South, 4=West).
+<code>L</code> = level. <code>N</code> = team name. <code>M</code> = message. <code>i</code> = resource index 0-6.
+<code>q0..q6</code> = food, linemate, deraumere, sibur, mendiane, phiras, thystame.</p>
+<h3 id="world-and-game-events"><a class="header" href="#world-and-game-events">World and game events</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Variant</th><th>Wire format</th></tr></thead><tbody>
+<tr><td><code>MapSize</code></td><td><code>msz X Y\n</code></td></tr>
+<tr><td><code>TileContent</code></td><td><code>bct X Y q0 q1 q2 q3 q4 q5 q6\n</code></td></tr>
+<tr><td><code>TeamName</code></td><td><code>tna N\n</code></td></tr>
+<tr><td><code>IncantationStart</code></td><td><code>pic X Y L #n1 #n2 ...\n</code></td></tr>
+<tr><td><code>IncantationEnd</code></td><td><code>pie X Y R\n</code></td></tr>
+<tr><td><code>EggNew</code></td><td><code>enw #e #n X Y\n</code></td></tr>
+<tr><td><code>EggBorn</code></td><td><code>ebo #e\n</code></td></tr>
+<tr><td><code>EggDeath</code></td><td><code>edi #e\n</code></td></tr>
+<tr><td><code>TimeUnit</code></td><td><code>sgt T\n</code></td></tr>
+<tr><td><code>TimeUnitModified</code></td><td><code>sst T\n</code></td></tr>
+<tr><td><code>GameEnd</code></td><td><code>seg N\n</code></td></tr>
+<tr><td><code>ServerMessage</code></td><td><code>smg M\n</code></td></tr>
+<tr><td><code>UnknownCommand</code></td><td><code>suc\n</code></td></tr>
+<tr><td><code>BadParameters</code></td><td><code>sbp\n</code></td></tr>
+</tbody></table>
+</div>
+<p><code>R</code> = incantation result (1 = success, 0 = failure).</p>
+<h2 id="design-patterns-1"><a class="header" href="#design-patterns-1">Design patterns</a></h2>
+<h3 id="pure-function"><a class="header" href="#pure-function">Pure function</a></h3>
+<p>The <code>format</code> function has no observable side effects. This makes it the
+canonical example of a <strong>functional core</strong> component: given a typed notification,
+it always returns the same string. Testing requires no mocks, no setup, and no
+teardown.</p>
+<p>If a wrong string reaches a GUI client, the entire call chain collapses to one
+function call and one input value. Debugging is trivially scoped.</p>
+<p>Reference: <a href="https://www.destroyallsoftware.com/screencasts/catalog/functional-core-imperative-shell">Functional Core, Imperative Shell -- Gary Bernhardt (2012)</a></p>
+<h3 id="exhaustive-dispatch"><a class="header" href="#exhaustive-dispatch">Exhaustive dispatch</a></h3>
+<p>Rust's <code>match</code> on <code>GuiNotification</code> must cover every variant. Adding a new
+notification type to the enum and forgetting to add the format arm is a
+<strong>compile error</strong>. The compiler acts as a completeness enforcer across the
+entire protocol.</p>
+<h3 id="information-hiding-via-pubsuper"><a class="header" href="#information-hiding-via-pubsuper">Information hiding via <code>pub(super)</code></a></h3>
+<p>Every helper function in <code>format/player.rs</code> and <code>format/world.rs</code> is declared
+<code>pub(super)</code>: visible only to <code>format/mod.rs</code>. No external code can call
+<code>player::player_death(...)</code> directly. The wire format details (orientation
+integers, resource indices, <code>#</code> prefix) are internal decisions hidden behind
+the single public <code>format()</code> function.</p>
+<p>If the protocol changes orientation encoding from 1-4 to compass letters, only
+<code>format/player.rs::orientation_code</code> changes. Every caller is untouched.</p>
+<p>Reference: <a href="https://www.cs.cornell.edu/courses/JavaAndDS/files/infoHiding.pdf">On the criteria to be used in decomposing systems into modules -- David Parnas (1972)</a></p>
+<h3 id="stringly-typed-avoidance"><a class="header" href="#stringly-typed-avoidance">Stringly-Typed Avoidance</a></h3>
+<p>The game engine constructs a typed <code>GuiNotification::PlayerPosition</code> with a
+<code>PlayerId</code>, a <code>u32</code> x/y pair, and an <code>Orientation</code> enum. It never builds a
+<code>"ppo #1 3 4 2\n"</code> string directly. The encoding from domain values to wire
+integers happens in one place and is never duplicated.</p>
+<p>This is the output-side complement of Parse, Don't Validate: <strong>Format, Don't
+Encode</strong>.</p>
+<h3 id="incremental-string-building-incantationstart"><a class="header" href="#incremental-string-building-incantationstart">Incremental string building (IncantationStart)</a></h3>
+<p><code>IncantationStart</code> carries a variable-length list of participant player ids.
+Rather than collecting ids into an intermediate <code>Vec&lt;String&gt;</code> and joining, the
+helper appends each id directly to the output buffer with <code>push_str</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut output = format!("pic {} {} {}", x, y, level);
+for player in players {
+    output.push(' ');
+    output.push('#');
+    output.push_str(&amp;player.0.to_string());
+}
+output.push('\n');
+<span class="boring">}</span></code></pre></pre>
+<p>One <code>String</code> allocation grows in place instead of creating and discarding
+multiple intermediate strings. This is the same approach as <code>StringBuilder</code> in
+Java or <code>strings.Builder</code> in Go.</p>
+<p>Reference: <a href="https://blog.logrocket.com/understanding-rust-string-str/">Effective String Handling in Rust -- LogRocket Blog</a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="domain-layer-overview"><a class="header" href="#domain-layer-overview">Domain layer overview</a></h1>
+<p>The domain layer is the heart of the server. It owns all game state and
+enforces all game rules. It has no knowledge of sockets, wire formats, or
+protocol encodings.</p>
+<pre class="mermaid">graph TD
+    subgraph &quot;world/&quot;
+        W[&quot;World&lt;br/&gt;(aggregate root)&quot;]
+        MAP[&quot;Map&lt;br/&gt;(toroidal grid)&quot;]
+        PLAYER[&quot;Player&lt;br/&gt;(entity)&quot;]
+        TEAM[&quot;Team&lt;br/&gt;(access policy)&quot;]
+        EGG[&quot;Egg&lt;br/&gt;(value object)&quot;]
+        RES[&quot;Resources&lt;br/&gt;(value object)&quot;]
+        TILE[&quot;Tile&lt;br/&gt;(value object)&quot;]
+        SPAWN[&quot;ResourceSpawner&lt;br/&gt;(strategy)&quot;]
+    end
+
+    W --&gt; MAP
+    W --&gt; PLAYER
+    W --&gt; TEAM
+    W --&gt; EGG
+    MAP --&gt; TILE
+    TILE --&gt; RES
+    PLAYER --&gt; RES
+    W --&gt; SPAWN
+</pre>
+<h2 id="dependency-direction"><a class="header" href="#dependency-direction">Dependency Direction</a></h2>
+<pre><code>protocol/ --&gt; world/       (parsers and serializers import domain types)
+world/    -/-&gt; protocol/   (domain never imports protocol or network)
+</code></pre>
+<p>The <code>Direction</code> enum is defined in <code>world/player/direction.rs</code>. Its wire
+encoding (North=1, East=2, South=3, West=4) lives exclusively in
+<code>protocol/gui/format/player.rs::orientation_code</code>. The domain type is unaware
+of this encoding.</p>
+<p>This dependency inversion is the central guarantee of hexagonal architecture:
+the domain can be tested, reasoned about, and evolved without touching
+infrastructure code.</p>
+<p>Reference: <a href="https://en.wikipedia.org/wiki/Dependency_inversion_principle">Dependency Inversion Principle -- Wikipedia</a></p>
+<h2 id="ddd-vocabulary"><a class="header" href="#ddd-vocabulary">DDD Vocabulary</a></h2>
+<p>The domain design follows Eric Evans' <strong>Domain-Driven Design</strong> classification:</p>
+<div class="table-wrapper"><table><thead><tr><th>Category</th><th>Type</th><th>Reason</th></tr></thead><tbody>
+<tr><td><strong>Aggregate Root</strong></td><td><code>World</code></td><td>All game state accessed through one owner</td></tr>
+<tr><td><strong>Entity</strong></td><td><code>Player</code></td><td>Has unique identity (<code>PlayerId</code>), mutable state</td></tr>
+<tr><td><strong>Value Object</strong></td><td><code>Direction</code></td><td>No identity, immutable, equality by value</td></tr>
+<tr><td><strong>Value Object</strong></td><td><code>Resources</code></td><td>No identity, all fields comparable</td></tr>
+<tr><td><strong>Value Object</strong></td><td><code>Egg</code></td><td>Position + team; identity tracked by <code>EggId</code>, not in-place mutation</td></tr>
+<tr><td><strong>Newtype</strong></td><td><code>PlayerId</code>, <code>EggId</code>, <code>Token</code></td><td>Distinct types prevent accidental mixing</td></tr>
+<tr><td><strong>Domain Service</strong></td><td><code>take_resource</code>, <code>drop_resource</code></td><td>Operations on two types simultaneously</td></tr>
+<tr><td><strong>Repository</strong></td><td><code>world.players: HashMap&lt;PlayerId, Player&gt;</code></td><td>Lookup by identity</td></tr>
+</tbody></table>
+</div>
+<p>Reference: <a href="https://martinfowler.com/bliki/EvansClassification.html">Evans Classification -- Martin Fowler</a></p>
+<h2 id="sub-chapters-1"><a class="header" href="#sub-chapters-1">Sub-chapters</a></h2>
+<ul>
+<li><a href="domain-world.html">World and Time System</a>: the aggregate root, tick loop, event model</li>
+<li><a href="domain-map.html">Toroidal Map</a>: flat buffer grid, toroidal coordinates</li>
+<li><a href="domain-resources.html">Tiles and Resources</a>: resource kinds, atomic operations, incantation resources</li>
+<li><a href="domain-player.html">Player</a>: entity model, food timer, action queue</li>
+<li><a href="domain-team.html">Team and Egg</a>: slot accounting, egg lifecycle, fork and hatch</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="world-and-time-system"><a class="header" href="#world-and-time-system">World and Time System</a></h1>
+<p>Source: <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/blob/main/server/src/world/world.rs"><code>server/src/world/world.rs</code></a></p>
+<p><code>World</code> is the aggregate root of the domain layer. It owns all mutable game
+state and exposes a single tick method that drives the entire simulation.</p>
+<h2 id="structure"><a class="header" href="#structure">Structure</a></h2>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct World {
+    pub map: Map,
+    pub teams: Vec&lt;Team&gt;,
+    pub players: HashMap&lt;PlayerId, Player&gt;,
+    pub eggs: HashMap&lt;EggId, Egg&gt;,
+    pub active_incantations: Vec&lt;ActiveIncantation&gt;,
+    pub tick: u64,
+    pub freq: u32,
+    // private: spawner, next_player_id, next_egg_id
+}
+
+pub struct ActiveIncantation {
+    pub initiator: PlayerId,
+    pub participants: Vec&lt;PlayerId&gt;,
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>active_incantations</code> tracks in-flight incantation rituals between Phase 1
+(queue time) and Phase 2 (fire time). See <a href="actions-incantation.html">Incantation</a>
+for the full two-phase design.</p>
+<p><code>players</code> and <code>eggs</code> use <code>HashMap</code> for O(1) lookup by id. <code>teams</code> uses <code>Vec</code>
+because team lookup is always by name scan over a small slice (typically 2-8
+teams).</p>
+<h2 id="the-tick-loop"><a class="header" href="#the-tick-loop">The tick loop</a></h2>
+<pre class="mermaid">sequenceDiagram
+    participant App as app.rs
+    participant World
+    participant Player
+    participant Spawner as ResourceSpawner
+
+    App-&gt;&gt;+World: advance_tick()
+    World-&gt;&gt;World: tick += 1
+    loop for each player
+        World-&gt;&gt;Player: tick_food()
+        alt food exhausted
+            World-&gt;&gt;World: remove player from map + players
+            World--&gt;&gt;App: WorldEvent::PlayerStarved
+        end
+    end
+    loop for each surviving player
+        World-&gt;&gt;Player: tick_action()
+        alt timer reached zero
+            World--&gt;&gt;App: WorldEvent::ActionReady { action }
+        end
+    end
+    alt tick % 20 == 0
+        World-&gt;&gt;Spawner: respawn(&amp;mut map)
+        World--&gt;&gt;App: WorldEvent::TilesUpdated { positions }
+    end
+    World--&gt;&gt;-App: Vec&lt;WorldEvent&gt;
+</pre>
+<h3 id="worldevent"><a class="header" href="#worldevent"><code>WorldEvent</code></a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum WorldEvent {
+    PlayerStarved { player_id: PlayerId },
+    ActionReady { player_id: PlayerId, action: Action },
+    TilesUpdated { positions: Vec&lt;(u32, u32)&gt; },
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>advance_tick</code> returns events as plain data. The <code>World</code> has no knowledge of
+networking. It is the caller (<code>app.rs</code>) that sends <code>dead\n</code> to a starved AI
+client, broadcasts <code>pdi</code> to GUI clients, and executes the game logic for a
+fired action.</p>
+<p>This design follows the <strong>event-driven</strong> architecture principle at the domain
+level: the world announces what happened; the application layer decides what to
+do about it.</p>
+<p>Reference: <a href="https://martinfowler.com/articles/201701-event-driven.html">Event-driven architecture -- Martin Fowler</a></p>
+<h2 id="design-patterns-2"><a class="header" href="#design-patterns-2">Design patterns</a></h2>
+<h3 id="single-mutable-owner"><a class="header" href="#single-mutable-owner">Single mutable owner</a></h3>
+<p>All game state lives in <code>World</code>. There is no shared ownership (<code>Arc</code>, <code>Mutex</code>),
+no channels, no background threads. The event loop holds one <code>World</code> value and
+mutates it by calling <code>advance_tick</code> once per time unit.</p>
+<p>This approach eliminates an entire class of concurrency bugs. A Rust
+<code>&amp;mut World</code> is an exclusive mutable reference; the borrow checker guarantees
+no other code can read or write world state while <code>advance_tick</code> runs.</p>
+<h3 id="action-timer-colocation"><a class="header" href="#action-timer-colocation">Action timer colocation</a></h3>
+<p>Each <code>Player</code> holds its own <code>action_ticks_remaining: u32</code>. The alternative
+(a <code>HashMap&lt;PlayerId, u32&gt;</code> on <code>World</code>) would require two structures to stay in
+sync whenever a player is removed.</p>
+<p>Keeping the timer on the player makes removal trivial: removing the player from
+<code>world.players</code> deletes the timer automatically.</p>
+<h3 id="respawn-determinism"><a class="header" href="#respawn-determinism">Respawn determinism</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>if self.tick % RESPAWN_PERIOD == 0 { ... }   // fires at 20, 40, 60, ...
+<span class="boring">}</span></code></pre></pre>
+<p>Respawn fires at absolute multiples of 20, not 20 ticks after the last fire.
+If the server catches up after a stall, multiple missed respawns execute
+sequentially but at the correct tick numbers. Behavior is deterministic and
+independent of wall-clock time.</p>
+<h3 id="initial-slot-model"><a class="header" href="#initial-slot-model">Initial slot model</a></h3>
+<p><code>World::new</code> calls <code>Team::new(name, 0)</code> and then <code>team.add_egg(id)</code> once per
+client slot. This ensures <code>available_slots</code> always equals the number of eggs on
+the map. Every connection goes through the <code>remove_egg</code> path, which handles
+both slot accounting and egg position lookup in one operation.</p>
+<h3 id="spawnedplayer"><a class="header" href="#spawnedplayer">SpawnedPlayer</a></h3>
+<p><code>spawn_player_from_team_egg</code> returns a <code>SpawnedPlayer</code> on success:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct SpawnedPlayer {
+    pub player_id: PlayerId,
+    pub egg_id: EggId,
+    pub x: u32,
+    pub y: u32,
+    pub remaining_slots: u32,
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>egg_id</code> is the id of the egg that was consumed. The handshake layer uses it
+to broadcast <code>ebo #egg_id</code> to GUI clients immediately after <code>pnw</code>.</p>
+<h2 id="time-system"><a class="header" href="#time-system">Time system</a></h2>
+<p>The server operates in <strong>time units</strong>. One time unit = <code>1 / freq</code> seconds. The
+reactor calls <code>advance_tick</code> once per time unit.</p>
+<div class="table-wrapper"><table><thead><tr><th>Spec requirement</th><th>Implementation</th></tr></thead><tbody>
+<tr><td>Global tick counter at rate <code>f/s</code></td><td><code>world.tick</code> incremented in <code>advance_tick</code></td></tr>
+<tr><td>Action execution time = <code>cost / f</code></td><td><code>enqueue_action</code> sets <code>ticks = action.time_cost()</code></td></tr>
+<tr><td>Per-player action timer</td><td><code>player.action_ticks_remaining</code> decremented in <code>tick_action</code></td></tr>
+<tr><td>Food decrement: 1 unit per 126 time units</td><td><code>tick_food</code> decrements <code>food_ticks_remaining</code></td></tr>
+<tr><td>Resource respawn every 20 time units</td><td><code>tick % RESPAWN_PERIOD == 0</code></td></tr>
+</tbody></table>
+</div>
+<p><strong>Rule</strong>: never use wall-clock seconds inside the domain layer. If a caller
+needs seconds, it divides by <code>freq</code> at the boundary.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="toroidal-map"><a class="header" href="#toroidal-map">Toroidal Map</a></h1>
+<p>Source: <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/blob/main/server/src/world/map.rs"><code>server/src/world/map.rs</code></a></p>
+<p><code>Map</code> is a 2D toroidal grid of tiles. Every coordinate access wraps
+automatically; there are no bounds checks that can fail at runtime.</p>
+<h2 id="flat-buffer-layout"><a class="header" href="#flat-buffer-layout">Flat buffer layout</a></h2>
+<p>The map is stored as a single contiguous <code>Vec&lt;Tile&gt;</code> in row-major order:</p>
+<pre><code>index = y * width + x
+</code></pre>
+<pre class="mermaid">graph LR
+    subgraph &quot;Vec&lt;Tile&gt; in memory&quot;
+        T00[&quot;(0,0)&quot;] --- T10[&quot;(1,0)&quot;] --- T20[&quot;(2,0)&quot;] --- T01[&quot;(0,1)&quot;] --- T11[&quot;(1,1)&quot;] --- T21[&quot;(2,1)&quot;]
+    end
+</pre>
+<p>The alternative, <code>Vec&lt;Vec&lt;Tile&gt;&gt;</code>, requires one heap allocation per row and one
+pointer dereference per row access. The flat layout has a single allocation and
+exploits <strong>spatial locality</strong>: tiles on the same row are adjacent in memory,
+making sequential access cache-friendly.</p>
+<p>References:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Row-_and_column-major_order">Row- and column-major order -- Wikipedia</a></li>
+<li><a href="https://medium.com/@turhan1943/why-arrays-are-fast-contiguous-memory-and-cache-locality-in-practice-0e1a2dcb1c8b">Why Arrays Are Fast: Contiguous Memory and Cache Locality -- Medium</a></li>
+</ul>
+<h2 id="single-point-of-truth-for-indexing"><a class="header" href="#single-point-of-truth-for-indexing">Single point of truth for indexing</a></h2>
+<p>All coordinate-to-index arithmetic lives in one private method:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn flat_index(&amp;self, x: u32, y: u32) -&gt; usize {
+    (y as usize) * (self.width as usize) + (x as usize)
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>get</code>, <code>get_mut</code>, <code>Index</code>, and <code>IndexMut</code> all delegate to <code>flat_index</code>. If the
+formula ever needs to change, there is exactly one place to edit and one place
+to test.</p>
+<p>Reference: <a href="https://en.wikipedia.org/wiki/Single_source_of_truth">Single source of truth -- Wikipedia</a></p>
+<h2 id="toroidal-arithmetic"><a class="header" href="#toroidal-arithmetic">Toroidal arithmetic</a></h2>
+<p>Movement uses signed deltas applied to unsigned coordinates. Naive subtraction
+underflows; a single <code>%</code> returns negative values in Rust. The solution uses
+<code>i64</code> intermediates and <code>rem_euclid</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn offset(&amp;self, x: u32, y: u32, dx: i32, dy: i32) -&gt; (u32, u32) {
+    let nx = ((x as i64 + dx as i64).rem_euclid(self.width as i64)) as u32;
+    let ny = ((y as i64 + dy as i64).rem_euclid(self.height as i64)) as u32;
+    (nx, ny)
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>rem_euclid</code> always returns a non-negative value, so wrapping past the left or
+top edge works correctly:</p>
+<pre><code>(-1).rem_euclid(10) == 9   // wraps to the right edge
+(-1) % 10           == -1  // wrong for toroidal semantics
+</code></pre>
+<pre class="mermaid">graph LR
+    subgraph &quot;Toroidal 5x5 map&quot;
+        direction LR
+        A[&quot;(4,2)&quot;] --&gt;|&quot;East: dx=+1&quot;| B[&quot;(0,2) wraps&quot;]
+        C[&quot;(2,0)&quot;] --&gt;|&quot;North: dy=-1&quot;| D[&quot;(2,4) wraps&quot;]
+    end
+</pre>
+<p>Reference: <a href="https://doc.rust-lang.org/std/primitive.i64.html#method.rem_euclid">i64::rem_euclid -- Rust Standard Library</a></p>
+<h2 id="api"><a class="header" href="#api">API</a></h2>
+<pre><code>Map::new(width, height)           -&gt; Map       create empty grid
+Map::get(&amp;self, x, y)             -&gt; &amp;Tile     toroidal read
+Map::get_mut(&amp;mut self, x, y)     -&gt; &amp;mut Tile toroidal write
+Map::offset(&amp;self, x, y, dx, dy) -&gt; (u32,u32)  toroidal step
+Map::width(&amp;self)                 -&gt; u32
+Map::height(&amp;self)                -&gt; u32
+Map::tile_count(&amp;self)            -&gt; usize
+map[(x, y)]                                    Index / IndexMut traits
+</code></pre>
+<p>All coordinate inputs wrap automatically. There are no panics for out-of-bounds
+coordinates.</p>
+<h2 id="operator-overloading"><a class="header" href="#operator-overloading">Operator overloading</a></h2>
+<p><code>Map</code> implements <code>std::ops::Index&lt;(u32, u32)&gt;</code> and <code>IndexMut&lt;(u32, u32)&gt;</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let food = map[(2, 3)].resources.food;
+map[(2, 3)].resources.add(ResourceKind::Food, 1);
+<span class="boring">}</span></code></pre></pre>
+<p>The trait implementations are thin wrappers over <code>get</code> and <code>get_mut</code>. Using
+standard library traits makes <code>Map</code> consistent with Rust's collection idioms.</p>
+<p>Reference: <a href="https://doc.rust-lang.org/std/ops/trait.Index.html">std::ops::Index -- Rust Standard Library</a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="tiles-and-resources"><a class="header" href="#tiles-and-resources">Tiles and Resources</a></h1>
+<p>Sources:
+<a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/blob/main/server/src/world/resource.rs"><code>server/src/world/resource.rs</code></a>,
+<a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/blob/main/server/src/world/tile.rs"><code>server/src/world/tile.rs</code></a>,
+<a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/blob/main/server/src/world/resource_spawner.rs"><code>server/src/world/resource_spawner.rs</code></a></p>
+<h2 id="resource-kinds"><a class="header" href="#resource-kinds">Resource kinds</a></h2>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum ResourceKind {
+    Food, Linemate, Deraumere, Sibur, Mendiane, Phiras, Thystame,
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>Copy</code> is derived because the enum has no heap-allocated fields; passing by
+value is cheaper than passing a reference for a 1-byte type.</p>
+<p><code>ResourceKind</code> was originally defined in the protocol layer alongside its wire
+index encoding. It was moved to <code>world/resource.rs</code> so that the dependency
+direction is correct: the protocol layer imports from the domain, never the
+other way around.</p>
+<h2 id="resources-struct"><a class="header" href="#resources-struct">Resources struct</a></h2>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Debug, Default, Clone, PartialEq)]
+pub struct Resources {
+    pub food: u32,
+    pub linemate: u32,
+    pub deraumere: u32,
+    pub sibur: u32,
+    pub mendiane: u32,
+    pub phiras: u32,
+    pub thystame: u32,
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>Resources</code> is used both for tile contents (what lies on the ground) and player
+inventories (what a drone carries). <code>Default</code> yields all-zero, the correct
+starting state for an empty tile or newly spawned player.</p>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Method</th><th>Signature</th><th>Purpose</th></tr></thead><tbody>
+<tr><td><code>get</code></td><td><code>(&amp;self, kind) -&gt; u32</code></td><td>Read one field</td></tr>
+<tr><td><code>add</code></td><td><code>(&amp;mut self, kind, amount)</code></td><td>Increment one field</td></tr>
+<tr><td><code>take</code></td><td><code>(&amp;mut self, kind, amount) -&gt; Result&lt;(), TileError&gt;</code></td><td>Decrement; error if insufficient</td></tr>
+<tr><td><code>has_enough</code></td><td><code>(&amp;self, required: &amp;Resources) -&gt; bool</code></td><td>Check all fields</td></tr>
+<tr><td><code>consume</code></td><td><code>(&amp;mut self, other: &amp;Resources)</code></td><td>Subtract all fields (precondition: <code>has_enough</code>)</td></tr>
+</tbody></table>
+</div>
+<h3 id="atomic-take"><a class="header" href="#atomic-take">Atomic <code>take</code></a></h3>
+<p><code>take</code> is atomic: if the available quantity is less than <code>amount</code>, the field is
+not modified and the error carries the context needed to log or respond without
+a second lookup:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum TileError {
+    InsufficientResource { kind: ResourceKind, available: u32, needed: u32 },
+}
+<span class="boring">}</span></code></pre></pre>
+<p>This is the domain-layer application of Parse, Don't Validate: the caller
+receives a value that explains the failure, not a boolean that forces another
+check.</p>
+<h3 id="preconditioned-consume"><a class="header" href="#preconditioned-consume">Preconditioned <code>consume</code></a></h3>
+<p><code>consume</code> subtracts field-by-field without checking. It is designed to be
+called after <code>has_enough</code> has confirmed validity:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// End-of-incantation sequence:
+if tile.resources.has_enough(&amp;required) {
+    tile.resources.consume(&amp;required);  // safe: has_enough already confirmed
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Rust's debug builds catch arithmetic underflow as a panic, making misuse
+immediately visible during development.</p>
+<h2 id="tile"><a class="header" href="#tile">Tile</a></h2>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Debug, Default)]
+pub struct Tile {
+    pub resources: Resources,
+    pub players: Vec&lt;u32&gt;,  // player ids standing here
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Multiple players may share a tile; the spec states Trantorians "easily run into
+their fellow creatures." <code>Default</code> yields an empty tile.</p>
+<h2 id="resource-spawner"><a class="header" href="#resource-spawner">Resource spawner</a></h2>
+<p>Source: <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/blob/main/server/src/world/resource_spawner.rs"><code>server/src/world/resource_spawner.rs</code></a></p>
+<h3 id="density-table"><a class="header" href="#density-table">Density table</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>ResourceKind</th><th>Density</th><th>Example: 10x10 map</th></tr></thead><tbody>
+<tr><td><code>Food</code></td><td>0.5</td><td>50</td></tr>
+<tr><td><code>Linemate</code></td><td>0.3</td><td>30</td></tr>
+<tr><td><code>Deraumere</code></td><td>0.15</td><td>15</td></tr>
+<tr><td><code>Sibur</code></td><td>0.1</td><td>10</td></tr>
+<tr><td><code>Mendiane</code></td><td>0.1</td><td>10</td></tr>
+<tr><td><code>Phiras</code></td><td>0.08</td><td>8</td></tr>
+<tr><td><code>Thystame</code></td><td>0.05</td><td>5</td></tr>
+</tbody></table>
+</div>
+<p>Formula: <code>max(1, floor(width * height * density))</code>. The minimum of 1 ensures
+every resource type always exists on the map, even on a 1x1 map.</p>
+<h3 id="respawn-via-deficit-calculation"><a class="header" href="#respawn-via-deficit-calculation">Respawn via deficit calculation</a></h3>
+<p><code>respawn</code> counts the current total of each type in a single pass over all tiles,
+computes the deficit, and places only the missing units:</p>
+<pre class="mermaid">flowchart LR
+    A[&quot;Count all resources&lt;br/&gt;on map&quot;] --&gt; B[&quot;Compute deficit&lt;br/&gt;= target - current&quot;]
+    B --&gt; C{deficit &gt; 0?}
+    C --&gt;|yes| D[&quot;Place deficit&lt;br/&gt;units randomly&quot;]
+    C --&gt;|no| E[&quot;No-op&quot;]
+    D --&gt; F[&quot;Return changed&lt;br/&gt;tile positions&quot;]
+</pre>
+<p>This design is <strong>idempotent</strong>: calling <code>respawn</code> twice when the map is full
+changes nothing and returns an empty list. The total cost scales with the
+deficit, not the full target.</p>
+<h3 id="linear-congruential-generator"><a class="header" href="#linear-congruential-generator">Linear congruential generator</a></h3>
+<p><code>Rng</code> uses the Knuth MMIX LCG constants (multiplier 6364136223846793005,
+addend 1442695040888963407) with <code>u64</code> wrapping arithmetic. Two generators with
+the same seed produce identical sequences, making game runs reproducible.</p>
+<p>The upper 32 bits of each step are used for <code>next_below</code> to exploit the better
+statistical properties of the high bits in an LCG (low bits in a standard LCG
+have shorter periods).</p>
+<p>References:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Linear_congruential_generator">Linear congruential generator -- Wikipedia</a></li>
+<li><a href="https://www-cs-faculty.stanford.edu/~knuth/taocp.html">Knuth, The Art of Computer Programming Vol. 2, section 3.3.4</a></li>
+</ul>
+<h2 id="domain-service-take_resource--drop_resource"><a class="header" href="#domain-service-take_resource--drop_resource">Domain service: take_resource / drop_resource</a></h2>
+<p><code>take_resource</code> and <code>drop_resource</code> each operate on both a <code>Tile</code> and a
+<code>Player</code>. Placing this logic on either type would create an import in the wrong
+direction. Free functions are the correct choice for operations that "do not
+naturally produce or act on a single type":</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>take_resource(&amp;mut tile, &amp;mut player, kind)?;  // tile -&gt; player
+drop_resource(&amp;mut tile, &amp;mut player, kind)?;  // player -&gt; tile
+<span class="boring">}</span></code></pre></pre>
+<p>Both delegate to <code>Resources::take</code> and <code>Resources::add</code>, preserving atomicity
+on failure.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="player"><a class="header" href="#player">Player</a></h1>
+<p>Source: <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/tree/main/server/src/world/player"><code>server/src/world/player/</code></a></p>
+<p><code>Player</code> is the central entity of the Zappy domain. It has a unique identity
+(<code>PlayerId</code>), mutable state, and behavioral invariants that are enforced by its
+API rather than by caller discipline.</p>
+<h2 id="structure-1"><a class="header" href="#structure-1">Structure</a></h2>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Player {
+    pub id: PlayerId,
+    pub x: u32,
+    pub y: u32,
+    pub direction: Direction,
+    pub level: u8,
+    pub inventory: Resources,
+    pub actions: ActionQueue,
+    pub frozen: bool,      // true during incantation
+    food_ticks_remaining: u32,   // private
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>food_ticks_remaining</code> is private. Only <code>tick_food()</code> may access it, which
+guarantees the invariant: for any living player, this counter is always in
+[1, 126].</p>
+<h2 id="entity-pattern"><a class="header" href="#entity-pattern">Entity pattern</a></h2>
+<p>A domain entity has a unique identity and mutable state. <code>PlayerId(u32)</code> is the
+identity. Two players with the same coordinates but different ids are distinct
+entities; two players with the same id at different coordinates are the same
+entity in different states.</p>
+<p>The entity pattern is contrasted with Value Objects (like <code>Direction</code> and
+<code>Resources</code>), which have no identity and are equal when all their fields are
+equal.</p>
+<p>Reference: <a href="https://martinfowler.com/bliki/EvansClassification.html">Evans Classification -- Martin Fowler</a></p>
+<h2 id="direction-value-object"><a class="header" href="#direction-value-object">Direction: value object</a></h2>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Direction { North, East, South, West }
+<span class="boring">}</span></code></pre></pre>
+<p><code>Direction</code> derives <code>Copy</code> and is passed by value. The rotation methods return
+a new <code>Direction</code> rather than mutating <code>self</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>player.direction = player.direction.turn_right();
+<span class="boring">}</span></code></pre></pre>
+<p>Chaining is natural because each call returns the same type:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let facing_south = Direction::North.turn_right().turn_right();
+<span class="boring">}</span></code></pre></pre>
+<p><code>to_delta()</code> returns the <code>(dx, dy)</code> pair for one step forward. The coordinate
+convention (North = <code>(0, -1)</code>, South = <code>(0, +1)</code>) is encoded in the tests.</p>
+<h2 id="two-variable-food-model"><a class="header" href="#two-variable-food-model">Two-variable food model</a></h2>
+<p>Food management uses two separate variables:</p>
+<ul>
+<li><code>inventory.food</code>: food stones carried. Displayed by <code>Inventory</code> command
+and <code>PlayerInventory</code> GUI notification.</li>
+<li><code>food_ticks_remaining</code>: private countdown from 126 to 0. When it reaches 0,
+one stone is consumed.</li>
+</ul>
+<pre class="mermaid">stateDiagram-v2
+    direction LR
+    [*] --&gt; Alive: food=10, ticks=126
+    Alive --&gt; Alive: tick_food() true (ticks 1..125)
+    Alive --&gt; StoneConsumed: tick 126 - ticks=0, food 10-&gt;9, reset to 126
+    StoneConsumed --&gt; Alive: continue
+    Alive --&gt; Dead: tick 1260 - ticks=0, food 1-&gt;0, returns false
+    Dead --&gt; [*]
+</pre>
+<p>The survival guarantee: a freshly spawned player with 10 food survives exactly
+<code>10 * 126 = 1260</code> ticks.</p>
+<p>The alternative (a single counter <code>food_units * 126</code>) would produce 1386 ticks
+for 10 initial stones because the timer runs before the first stone is consumed.
+The two-variable model is correct by construction.</p>
+<h2 id="command-pattern-actionqueue"><a class="header" href="#command-pattern-actionqueue">Command pattern: ActionQueue</a></h2>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct ActionQueue { actions: VecDeque&lt;Action&gt; }
+<span class="boring">}</span></code></pre></pre>
+<p><code>Action</code> is a closed enum where each variant is a first-class value:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum Action {
+    Forward, TurnRight, TurnLeft, Look, Inventory,
+    Broadcast(String), ConnectNbr, Fork, Eject,
+    Take(ResourceKind), Set(ResourceKind), Incantation,
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>time_cost()</code> returns the execution cost without any mutable state. This makes
+the queue a pure data structure. The execution logic lives in <code>utils/actions/</code>,
+not in the action itself.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let cost = action.time_cost();   // pure, no side effects
+player.enqueue_action(action);   // queued, not executed
+<span class="boring">}</span></code></pre></pre>
+<p>Reference: <a href="https://refactoring.guru/design-patterns/command">Command Pattern -- Refactoring Guru</a></p>
+<h3 id="action-costs"><a class="header" href="#action-costs">Action costs</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Action</th><th>Time cost (time units)</th></tr></thead><tbody>
+<tr><td>Forward, TurnRight, TurnLeft, Look, Broadcast, Eject, Take, Set</td><td>7</td></tr>
+<tr><td>Inventory</td><td>1</td></tr>
+<tr><td>ConnectNbr</td><td>0</td></tr>
+<tr><td>Fork</td><td>42</td></tr>
+<tr><td>Incantation</td><td>300</td></tr>
+</tbody></table>
+</div>
+<h3 id="queue-as-protocol-contract"><a class="header" href="#queue-as-protocol-contract">Queue as protocol contract</a></h3>
+<p><code>ActionQueue</code> wraps a <code>VecDeque&lt;Action&gt;</code> with a hard capacity of 10. <code>push</code>
+returns <code>false</code> when the queue is full rather than panicking or silently
+dropping. The spec states:</p>
+<blockquote>
+<p>"The client can send up to 10 requests in a row without any response.
+Over 10, the server will no longer take them into account."</p>
+</blockquote>
+<p>The capacity is enforced by the type. Any code that calls <code>push</code> handles the
+<code>false</code> case explicitly.</p>
+<h2 id="player-lifecycle"><a class="header" href="#player-lifecycle">Player lifecycle</a></h2>
+<pre class="mermaid">flowchart TD
+    EGG[&quot;Egg on tile&quot;] --&gt;|&quot;Client connects&quot;| SPAWN[&quot;Player spawned&lt;br/&gt;at egg position&quot;]
+    SPAWN --&gt; ALIVE[&quot;Level 1, food=10&lt;br/&gt;actions queue empty&quot;]
+    ALIVE --&gt;|&quot;AI commands&quot;| QUEUED[&quot;Actions in queue&quot;]
+    QUEUED --&gt;|&quot;timer expires&quot;| EXEC[&quot;Action executed&lt;br/&gt;WorldEvent::ActionReady&quot;]
+    EXEC --&gt; ALIVE
+    ALIVE --&gt;|&quot;food reaches 0&quot;| STARVED[&quot;WorldEvent::PlayerStarved&lt;br/&gt;'dead' sent, pdi broadcast&quot;]
+    STARVED --&gt; REMOVED[&quot;Player removed from world&quot;]
+    EXEC --&gt;|&quot;Incantation success&lt;br/&gt;level == 8&quot;| VICTORY[&quot;Check win condition&quot;]
+</pre>
+<h2 id="constants"><a class="header" href="#constants">Constants</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Constant</th><th>Value</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><code>FOOD_TICKS_PER_UNIT</code></td><td>126</td><td>Ticks of life per food stone</td></tr>
+<tr><td><code>INITIAL_FOOD_UNITS</code></td><td>10</td><td>Starting food stones</td></tr>
+<tr><td><code>MIN_LEVEL</code></td><td>1</td><td>Starting level</td></tr>
+<tr><td><code>MAX_LEVEL</code></td><td>8</td><td>Level required for win condition</td></tr>
+<tr><td><code>MAX_PENDING_ACTIONS</code></td><td>10</td><td>Action queue capacity</td></tr>
+</tbody></table>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="team-and-egg"><a class="header" href="#team-and-egg">Team and Egg</a></h1>
+<p>Sources:
+<a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/blob/main/server/src/world/team.rs"><code>server/src/world/team.rs</code></a>,
+<a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/blob/main/server/src/world/egg.rs"><code>server/src/world/egg.rs</code></a></p>
+<h2 id="slot-model"><a class="header" href="#slot-model">Slot model</a></h2>
+<p>The spec defines a per-team connection counter. <code>Team</code> enforces it with private
+fields and behavioral methods:</p>
+<div class="table-wrapper"><table><thead><tr><th>Event</th><th>Operation</th><th>Effect on <code>available_slots</code></th></tr></thead><tbody>
+<tr><td>Server starts</td><td><code>Team::new(name, 0)</code> then <code>add_egg</code> x N</td><td><code>+= N</code></td></tr>
+<tr><td>Player executes Fork</td><td><code>team.add_egg(id)</code></td><td><code>+= 1</code></td></tr>
+<tr><td>New client connects</td><td><code>team.remove_egg(egg_id)</code> (via <code>spawn_player_from_team_egg</code>)</td><td><code>-= 1</code></td></tr>
+<tr><td>Egg ejected from tile</td><td><code>team.remove_egg(id)</code></td><td><code>-= 1</code></td></tr>
+</tbody></table>
+</div>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Team {
+    pub name: String,
+    available_slots: u32,   // private
+    eggs: Vec&lt;EggId&gt;,       // private
+}
+<span class="boring">}</span></code></pre></pre>
+<p>There is no <code>set_available_slots</code> method. Creating an inconsistent state from
+outside the module is impossible.</p>
+<h2 id="egg-as-value-object"><a class="header" href="#egg-as-value-object">Egg as value object</a></h2>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Debug, Clone, PartialEq)]
+pub struct Egg {
+    pub id: EggId,
+    pub team: String,
+    pub x: u32,
+    pub y: u32,
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>Egg</code> has no mutable methods. When an egg changes status (hatches or is
+destroyed), the caller removes it from the world and from the team. There is no
+in-place mutation of an existing egg.</p>
+<p>This is the <strong>Value Object</strong> pattern from DDD: the egg is not defined by
+continuity of identity but by its attributes. <code>EggId</code> is the identifier; the
+egg itself is disposable data.</p>
+<p>Reference: <a href="https://martinfowler.com/bliki/EvansClassification.html">Evans Classification -- Martin Fowler</a></p>
+<h2 id="why-team-and-egg-are-separate-types"><a class="header" href="#why-team-and-egg-are-separate-types">Why Team and Egg are separate types</a></h2>
+<p><code>Team</code> stores only <code>EggId</code>s, not full <code>Egg</code> values. Position and team name live
+in <code>Egg</code>, which the <code>World</code> owns alongside <code>Player</code>. The link is the id:</p>
+<pre><code>Tile::players   Vec&lt;PlayerId&gt; --&gt; Player in World.players
+Team::eggs      Vec&lt;EggId&gt;    --&gt; Egg    in World.eggs
+</code></pre>
+<p>Storing full <code>Egg</code> values inside <code>Team</code> would couple access policy (slot count)
+with physical location (tile position). Those two concerns change independently.</p>
+<h2 id="full-lifecycle"><a class="header" href="#full-lifecycle">Full lifecycle</a></h2>
+<pre class="mermaid">sequenceDiagram
+    participant AI as AI Client
+    participant App as app.rs
+    participant Team
+    participant World
+
+    Note over App,World: Server starts
+    App-&gt;&gt;World: World::new(...)
+    loop for each slot
+        World-&gt;&gt;World: alloc_egg_id()
+        World-&gt;&gt;World: place Egg at random position
+        World-&gt;&gt;Team: team.add_egg(egg_id)
+        Note right of Team: available_slots += 1
+    end
+
+    Note over AI,World: New AI connection
+    AI-&gt;&gt;App: &quot;red\n&quot; (team name)
+    App-&gt;&gt;World: spawn_player_from_team_egg(&quot;red&quot;)
+    World-&gt;&gt;World: pick random egg from team
+    World-&gt;&gt;Team: team.remove_egg(egg_id)
+    Note right of Team: available_slots -= 1
+    World--&gt;&gt;App: SpawnedPlayer { player_id, egg_id, x, y, remaining_slots }
+    App-&gt;&gt;AI: &quot;5\n10 20\n&quot; (slots remaining + map size)
+
+    Note over AI,World: Fork action
+    AI-&gt;&gt;App: &quot;Fork\n&quot;
+    App-&gt;&gt;World: alloc_egg_id()
+    App-&gt;&gt;World: create Egg at player position
+    App-&gt;&gt;Team: team.add_egg(egg_id)
+    Note right of Team: available_slots += 1
+
+    Note over AI,World: Eject destroys egg
+    App-&gt;&gt;Team: team.remove_egg(egg_id)
+    Note right of Team: available_slots -= 1
+    App-&gt;&gt;World: remove Egg from world.eggs
+</pre>
+<h2 id="encapsulation-by-invariant"><a class="header" href="#encapsulation-by-invariant">Encapsulation by invariant</a></h2>
+<p><code>available_slots</code> and <code>eggs</code> are private. The public methods maintain the
+invariant atomically:</p>
+<ul>
+<li><code>add_egg</code>: records the egg id and increments <code>available_slots</code>.</li>
+<li><code>remove_egg</code>: removes the id and decrements <code>available_slots</code> with
+<code>saturating_sub</code> (never goes below zero).</li>
+<li><code>consume_slot</code>: decrements <code>available_slots</code> by one but returns
+<code>Err(NoSlotsAvailable)</code> before decrementing if already at zero.</li>
+</ul>
+<p>There is no path that leaves the counter inconsistent with the egg list.</p>
+<p>Reference: <a href="https://www.amazon.com/Growing-Object-Oriented-Software-Guided-Tests/dp/0321503627">Growing Object-Oriented Software, Guided by Tests -- Freeman &amp; Pryce (2009)</a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="action-execution-loop"><a class="header" href="#action-execution-loop">Action execution loop</a></h1>
+<p>Source: <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/tree/main/server/src/utils/actions"><code>server/src/utils/actions/</code></a></p>
+<p>When <code>World::advance_tick</code> fires <code>WorldEvent::ActionReady { player_id, action }</code>,
+<code>tick_events.rs</code> calls <code>actions::execute(reactor, state, world, player_id, action)</code>.
+This is the boundary between the time system and the game logic.</p>
+<p><code>execute</code> resolves the <code>Token</code> from the <code>player_id</code> via <code>state.token_for(player_id)</code> before
+building the <code>ActionContext</code> and dispatching. If the player has no associated token (already
+disconnected), the action is silently dropped.</p>
+<h2 id="actioncontext"><a class="header" href="#actioncontext">ActionContext</a></h2>
+<p>All action functions receive an <code>ActionContext&lt;'a&gt;</code> instead of three separate
+parameters:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct ActionContext&lt;'a&gt; {
+    pub reactor: &amp;'a mut Reactor,
+    pub state: &amp;'a mut State,
+    pub world: &amp;'a mut World,
+}
+<span class="boring">}</span></code></pre></pre>
+<p>This reduces every action signature from 5-6 arguments to 3-4, and bundles the
+three mutable references that every handler needs into one named struct. Rust's
+field-level borrow splitting allows accessing <code>ctx.reactor</code> and <code>ctx.state</code>
+simultaneously because they are distinct fields of the same struct.</p>
+<h2 id="action-dispatch"><a class="header" href="#action-dispatch">Action dispatch</a></h2>
+<pre class="mermaid">flowchart TD
+    W[&quot;WorldEvent::ActionReady&lt;br/&gt;{ player_id, action }&quot;] --&gt; E[&quot;execute()&quot;]
+    E --&gt; CTX[&quot;ActionContext::new&lt;br/&gt;(reactor, state, world)&quot;]
+    CTX --&gt; MATCH{&quot;action&quot;}
+    MATCH --&gt;|&quot;Forward&quot;| FWD[&quot;forward(ctx, token, player_id)&quot;]
+    MATCH --&gt;|&quot;TurnRight&quot;| TR[&quot;turn(ctx, token, player_id, right=true)&quot;]
+    MATCH --&gt;|&quot;Look&quot;| LOOK[&quot;look(ctx, token, player_id)&quot;]
+    MATCH --&gt;|&quot;Inventory&quot;| INV[&quot;inventory(ctx, token, player_id)&quot;]
+    MATCH --&gt;|&quot;Broadcast(text)&quot;| BC[&quot;broadcast(ctx, token, player_id, text)&quot;]
+    MATCH --&gt;|&quot;ConnectNbr&quot;| NBR[&quot;connect_nbr(ctx, token)&quot;]
+    MATCH --&gt;|&quot;Fork&quot;| FORK[&quot;fork(ctx, token, player_id)&quot;]
+    MATCH --&gt;|&quot;Eject&quot;| EJ[&quot;eject(ctx, token, player_id)&quot;]
+    MATCH --&gt;|&quot;Take(kind)&quot;| TAKE[&quot;take(ctx, token, player_id, kind)&quot;]
+    MATCH --&gt;|&quot;Set(kind)&quot;| SET[&quot;set(ctx, token, player_id, kind)&quot;]
+    MATCH --&gt;|&quot;Incantation&quot;| INC[&quot;incantation(ctx, token, player_id)&quot;]
+</pre>
+<h2 id="action-reference"><a class="header" href="#action-reference">Action reference</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Action</th><th>Cost</th><th>AI response</th><th>GUI notification</th></tr></thead><tbody>
+<tr><td>Forward</td><td>7</td><td><code>ok\n</code></td><td><code>ppo</code></td></tr>
+<tr><td>TurnRight / TurnLeft</td><td>7</td><td><code>ok\n</code></td><td><code>ppo</code></td></tr>
+<tr><td>Look</td><td>7</td><td>tile list</td><td>none</td></tr>
+<tr><td>Inventory</td><td>1</td><td><code>[ food N, linemate N, deraumere N, sibur N, mendiane N, phiras N, thystame N ]\n</code></td><td>none</td></tr>
+<tr><td>Broadcast text</td><td>7</td><td><code>ok\n</code></td><td><code>pbc</code></td></tr>
+<tr><td>ConnectNbr</td><td>0</td><td><code>N\n</code></td><td>none</td></tr>
+<tr><td>Fork</td><td>42</td><td><code>ok\n</code></td><td><code>pfk</code> + <code>enw</code></td></tr>
+<tr><td>Eject</td><td>7</td><td><code>ok\n</code></td><td><code>pex</code> per ejected player</td></tr>
+<tr><td>Take object</td><td>7</td><td><code>ok\n</code> or <code>ko\n</code></td><td><code>pgt</code> + <code>bct</code> on success</td></tr>
+<tr><td>Set object</td><td>7</td><td><code>ok\n</code> or <code>ko\n</code></td><td><code>pdr</code> + <code>bct</code> on success</td></tr>
+<tr><td>Incantation</td><td>300</td><td>level or <code>ko\n</code></td><td><code>pic</code> + <code>plv</code> + <code>pie</code></td></tr>
+</tbody></table>
+</div>
+<h2 id="movement"><a class="header" href="#movement">Movement</a></h2>
+<p>Forward computes the new position using <code>Direction::to_delta</code> and
+<code>Map::offset</code> (toroidal wrapping), updates the tile player lists, updates
+the player struct, and broadcasts <code>ppo</code> to all GUI clients.</p>
+<h2 id="look"><a class="header" href="#look">Look</a></h2>
+<p>Look constructs the visible tile list based on the player's level and
+orientation. At level L, the player sees <code>(L+1)^2</code> tiles arranged in a
+frontward-expanding diamond: the current tile, then L rows ahead each wider
+by 2 tiles.</p>
+<pre><code>Level 1: [self] [front-left, front, front-right]  (4 tiles)
+Level 2: [self] [3 tiles at row 1] [5 tiles at row 2]  (9 tiles)
+</code></pre>
+<p>Each tile is formatted as a space-separated list of contents: <code>player</code>,
+<code>food</code>, <code>linemate</code>, etc.</p>
+<h2 id="broadcast"><a class="header" href="#broadcast">Broadcast</a></h2>
+<p>Broadcast computes the direction K (1-8) from each receiver's perspective
+using shortest-path toroidal geometry. K=0 means the sender and receiver
+share the same tile. The receiver gets <code>message K, text\n</code>; the sender gets
+<code>ok\n</code>. The <code>pbc</code> notification goes to all GUI clients.</p>
+<h2 id="eject"><a class="header" href="#eject">Eject</a></h2>
+<p>Eject pushes all players and destroys all eggs on the caster's tile in the
+caster's facing direction. Pushed players move to the adjacent tile in that
+direction (toroidal). Each pushed player receives <code>eject: K\n</code> where K is
+the push direction. GUI clients receive <code>pex</code> for each pushed player and
+<code>edi</code> for each destroyed egg.</p>
+<h2 id="fork"><a class="header" href="#fork">Fork</a></h2>
+<p>Fork allocates a new <code>EggId</code>, creates an <code>Egg</code> at the player's current
+position, registers it with the team (incrementing <code>available_slots</code>), and
+sends <code>pfk</code> + <code>enw</code> to all GUI clients. The egg persists until a new AI
+client hatches from it or an Eject destroys it.</p>
+<h2 id="resource-commands"><a class="header" href="#resource-commands">Resource commands</a></h2>
+<p>Take moves one unit of the named resource from the tile to the player
+inventory, sends <code>ok\n</code> or <code>ko\n</code>, and on success broadcasts <code>pgt</code> and the
+updated <code>bct</code> to all GUI clients. Set does the inverse.</p>
+<p>Both use <code>take_resource</code> and <code>drop_resource</code> free functions (domain service
+pattern) to operate on both the <code>Tile</code> and the <code>Player</code> atomically.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="incantation"><a class="header" href="#incantation">Incantation</a></h1>
+<p>Source: <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/tree/main/server/src/utils/actions/incantation"><code>server/src/utils/actions/incantation/</code></a>,
+<a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/blob/main/server/src/utils/commands/handle_ai_command.rs"><code>server/src/utils/commands/handle_ai_command.rs</code></a></p>
+<p>Incantation is the elevation ritual. A group of players of the same level on
+the same tile can collectively raise their level by consuming specific stones.
+The ritual takes 300 time units (300/f seconds).</p>
+<h2 id="two-phase-design"><a class="header" href="#two-phase-design">Two-phase design</a></h2>
+<p>Incantation uses a two-phase commit: preconditions are verified immediately at
+queue time (Phase 1), and the ritual executes after the 300-tick countdown
+(Phase 2). This prevents a player from queuing an incantation that had no
+chance of succeeding.</p>
+<h2 id="sequence"><a class="header" href="#sequence">Sequence</a></h2>
+<pre class="mermaid">sequenceDiagram
+    participant AI as Initiator AI
+    participant Server
+    participant Participants
+    participant GUI
+
+    AI-&gt;&gt;Server: Incantation
+
+    Note over Server: Phase 1 — at queue time
+
+    Server-&gt;&gt;Server: collect_participants(world, x, y, level)
+    Server-&gt;&gt;Server: requirements_for(level)
+    alt not enough players OR not enough resources
+        Server-&gt;&gt;AI: ko
+    else preconditions met
+        Server-&gt;&gt;Server: enqueue Incantation action (300 ticks)
+        Server-&gt;&gt;Server: store ActiveIncantation { initiator, participants }
+        loop for each participant
+            Server-&gt;&gt;Participants: &quot;Elevation underway\n&quot;
+            Server-&gt;&gt;Server: player.frozen = true
+        end
+        Server-&gt;&gt;GUI: pic X Y L #p1 #p2 ...
+    end
+
+    Note over Server: Phase 2 — 300 ticks later
+
+    Server-&gt;&gt;Server: re-check participants still on tile, same level
+    Server-&gt;&gt;Server: re-check resources still present
+
+    alt still valid
+        Server-&gt;&gt;Server: consume resources from tile
+        loop for each participant
+            Server-&gt;&gt;Server: player.level += 1
+            Server-&gt;&gt;Server: player.frozen = false
+            Server-&gt;&gt;Participants: &quot;Current level: N\n&quot;
+            Server-&gt;&gt;GUI: plv #n new_level
+        end
+        Server-&gt;&gt;GUI: pie X Y 1 (success)
+        Server-&gt;&gt;Server: check_victory()
+    else conditions no longer met
+        loop for each participant
+            Server-&gt;&gt;Participants: ko
+            Server-&gt;&gt;Server: player.frozen = false
+        end
+        Server-&gt;&gt;GUI: pie X Y 0 (failure)
+    end
+</pre>
+<h2 id="level-requirements-table"><a class="header" href="#level-requirements-table">Level requirements table</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Level</th><th>Players</th><th>linemate</th><th>deraumere</th><th>sibur</th><th>mendiane</th><th>phiras</th><th>thystame</th></tr></thead><tbody>
+<tr><td>1 -&gt; 2</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>2 -&gt; 3</td><td>2</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>3 -&gt; 4</td><td>2</td><td>2</td><td>0</td><td>1</td><td>0</td><td>2</td><td>0</td></tr>
+<tr><td>4 -&gt; 5</td><td>4</td><td>1</td><td>1</td><td>2</td><td>0</td><td>1</td><td>0</td></tr>
+<tr><td>5 -&gt; 6</td><td>4</td><td>1</td><td>2</td><td>1</td><td>3</td><td>0</td><td>0</td></tr>
+<tr><td>6 -&gt; 7</td><td>6</td><td>1</td><td>2</td><td>3</td><td>0</td><td>1</td><td>0</td></tr>
+<tr><td>7 -&gt; 8</td><td>6</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>1</td></tr>
+</tbody></table>
+</div>
+<p><code>requirements_for(level: u8) -&gt; Option&lt;LevelRequirement&gt;</code> returns <code>None</code> for
+level 0 or level &gt;= 8, making it impossible to incant at max level.</p>
+<h2 id="participant-collection"><a class="header" href="#participant-collection">Participant collection</a></h2>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub(crate) fn collect_participants(
+    world: &amp;World,
+    x: u32,
+    y: u32,
+    level: u8,
+) -&gt; Vec&lt;PlayerId&gt; {
+    world.map.get(x, y).players.iter()
+        .filter(|&amp;&amp;pid| {
+            world.players.get(&amp;pid)
+                .is_some_and(|p| p.level == level &amp;&amp; !p.frozen)
+        })
+        .copied()
+        .collect()
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Only players on the same tile, at the <strong>same level</strong> as the initiator, and
+<strong>not already frozen</strong> in another incantation qualify. The initiating player
+is always included (they are on the tile and not yet frozen at collection time).</p>
+<h2 id="activeincantation"><a class="header" href="#activeincantation">ActiveIncantation</a></h2>
+<p>Between Phase 1 and Phase 2 the world stores which participants were locked in:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct ActiveIncantation {
+    pub initiator: PlayerId,
+    pub participants: Vec&lt;PlayerId&gt;,
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>World.active_incantations: Vec&lt;ActiveIncantation&gt;</code> holds one entry per
+in-flight ritual. At Phase 2 fire time, <code>incantation/mod.rs</code> removes the
+matching entry by <code>initiator</code> and re-verifies each participant's position,
+level, and frozen state against the tile's current resources.</p>
+<h2 id="resource-consumption"><a class="header" href="#resource-consumption">Resource consumption</a></h2>
+<p><code>tile.resources.consume(&amp;req.resources)</code> subtracts all required stones in one
+call after <code>has_enough</code> confirms they are present. This is an atomic operation:
+if <code>has_enough</code> returns true, <code>consume</code> will not panic.</p>
+<h2 id="freeze-flag"><a class="header" href="#freeze-flag">Freeze flag</a></h2>
+<p><code>player.frozen</code> is set to <code>true</code> at <strong>Phase 1 (queue time)</strong>, immediately after
+conditions are confirmed and <code>pic</code> is broadcast. This prevents participants
+from executing new actions while the ritual is counting down.</p>
+<p>A frozen player can still receive commands — they are buffered in the action
+queue — but <code>tick_action</code> will not fire any action while <code>frozen == true</code>.
+On ritual completion (success or failure), all participants are unfrozen and
+their queued actions resume normally.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="win-condition"><a class="header" href="#win-condition">Win condition</a></h1>
+<p>Source: <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/blob/main/server/src/utils/actions/incantation/victory.rs"><code>server/src/utils/actions/incantation/victory.rs</code></a></p>
+<p>After every successful incantation, <code>check_victory</code> scans all players for the
+win condition.</p>
+<h2 id="condition"><a class="header" href="#condition">Condition</a></h2>
+<p>The game ends when <strong>six or more players of the same team</strong> simultaneously hold
+level 8 (<code>MAX_LEVEL</code>).</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>const WIN_THRESHOLD: u32 = 6;
+<span class="boring">}</span></code></pre></pre>
+<h2 id="algorithm"><a class="header" href="#algorithm">Algorithm</a></h2>
+<pre class="mermaid">flowchart TD
+    A[&quot;check_victory(ctx)&quot;] --&gt; B[&quot;find_winning_team(ctx)&quot;]
+    B --&gt; C[&quot;Build HashMap per team&lt;br/&gt;count players at level 8&quot;]
+    C --&gt; D{any count &gt;= WIN_THRESHOLD?}
+    D --&gt;|yes| E[&quot;broadcast 'seg team'&lt;br/&gt;to all GUI clients&quot;]
+    D --&gt;|no| F[&quot;return Ok(())&quot;]
+    E --&gt; G[&quot;return Ok(())&quot;]
+</pre>
+<p><code>find_winning_team</code> uses <code>State::token_for(player_id)</code> and
+<code>State::client_type(token)</code> to recover the team name from a <code>Player</code>. The
+<code>Player</code> struct itself stores no team field; team membership is tracked through
+the <code>State</code> client map.</p>
+<h2 id="broadcast-and-shutdown"><a class="header" href="#broadcast-and-shutdown">Broadcast and shutdown</a></h2>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>GuiNotification::GameEnd { team: winning_team }
+// wire: "seg team_name\n"
+<span class="boring">}</span></code></pre></pre>
+<p><code>seg</code> is broadcast to all connected <strong>GUI</strong> clients via <code>broadcast_gui</code>. AI
+clients do not receive <code>seg</code> directly; their sockets are closed when the
+reactor stops.</p>
+<p>After broadcasting, <code>check_victory</code> calls <code>ctx.reactor.stop()</code>, which sets the
+reactor's internal <code>running</code> flag to <code>false</code>. The event loop exits cleanly
+after the current iteration, closing all registered handlers.</p>
+<h2 id="why-check-after-every-incantation"><a class="header" href="#why-check-after-every-incantation">Why check after every incantation?</a></h2>
+<p>The only way for a player to reach level 8 is through a successful incantation
+at level 7. Checking the win condition after every successful incantation
+guarantees the check fires at the earliest possible moment, with no polling
+overhead on ticks where no elevation occurred.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="cli-arguments"><a class="header" href="#cli-arguments">CLI Arguments</a></h1>
+<p>Source: <a href="https://github.com/EpitechPGE2-2025/G-YEP-400-NCY-4-1-zappy-4/tree/main/server/src/cli"><code>server/src/cli/</code></a></p>
+<p>The <code>cli</code> module parses raw command-line arguments into a typed <code>ServerArgs</code>.
+It does not touch sockets, game state, or time. Once <code>ServerArgs</code> is in hand,
+no argument string is ever read again.</p>
+<h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
+<pre><code class="language-bash">zappy_server -p port -x width -y height -n name1 name2 ... -c clientsNb -f freq
+</code></pre>
+<h2 id="flag-reference"><a class="header" href="#flag-reference">Flag reference</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Flag</th><th>Type</th><th>Constraint</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>-p port</code></td><td><code>u16</code></td><td>any valid port</td><td>Port the server listens on</td></tr>
+<tr><td><code>-x width</code></td><td><code>u32</code></td><td>&gt;= 1</td><td>Map width in tiles</td></tr>
+<tr><td><code>-y height</code></td><td><code>u32</code></td><td>&gt;= 1</td><td>Map height in tiles</td></tr>
+<tr><td><code>-n names...</code></td><td><code>Vec&lt;String&gt;</code></td><td>at least one</td><td>Team names (space-separated)</td></tr>
+<tr><td><code>-c clientsNb</code></td><td><code>u32</code></td><td>&gt;= 1</td><td>Maximum clients per team</td></tr>
+<tr><td><code>-f freq</code></td><td><code>u32</code></td><td>&gt;= 1</td><td>Time units per second</td></tr>
+</tbody></table>
+</div>
+<p>Flags may appear in any order. A flag given twice takes its last value (last
+write wins), consistent with standard Unix CLI behavior.</p>
+<h2 id="serverargs"><a class="header" href="#serverargs">ServerArgs</a></h2>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct ServerArgs {
+    pub port: u16,
+    pub width: u32,
+    pub height: u32,
+    pub team_names: Vec&lt;String&gt;,
+    pub clients_per_team: u32,
+    pub freq: u32,
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Every field is the smallest type that naturally rejects out-of-range values.
+<code>port</code> is <code>u16</code> (0-65535 by the type; <code>99999</code> cannot be stored). The
+<code>Vec&lt;String&gt;</code> for team names is guaranteed non-empty before <code>ServerArgs</code> is
+constructed.</p>
+<h2 id="design-patterns-3"><a class="header" href="#design-patterns-3">Design patterns</a></h2>
+<h3 id="parse-dont-validate-1"><a class="header" href="#parse-dont-validate-1">Parse, don't validate</a></h3>
+<p>The game engine never touches a raw argument string. It receives a <code>ServerArgs</code>
+with typed fields. The single parse boundary is <code>ServerArgs::from_args()</code>.
+Everything that crosses it is either a fully typed struct or a typed <code>ArgsError</code>.</p>
+<p>Reference: <a href="https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/">Parse, don't validate -- Alexis King (2019)</a></p>
+<h3 id="predictive-token-scan-ll1"><a class="header" href="#predictive-token-scan-ll1">Predictive token scan (LL(1))</a></h3>
+<p>Arguments are consumed left-to-right with an index cursor. Each token is
+examined once: if it starts with <code>-</code>, it is a flag; otherwise it is a value
+for the current flag. No backtracking. This is the same LL(1) pattern used in
+the GUI command parser, applied to a flat key-value list.</p>
+<h3 id="generic-helper-next_parsedt"><a class="header" href="#generic-helper-next_parsedt">Generic helper: <code>next_parsed&lt;T&gt;</code></a></h3>
+<p>A single generic function replaces what would otherwise be two identical
+functions <code>next_u16</code> and <code>next_u32</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn next_parsed&lt;T: FromStr&gt;(flag: &amp;str, args: &amp;[String], idx: &amp;mut usize)
+    -&gt; Result&lt;T, ArgsError&gt;
+<span class="boring">}</span></code></pre></pre>
+<p>The type parameter is inferred from context. The constraint <code>T: FromStr</code> is the
+minimal and correct bound: the function only needs to call <code>str::parse::&lt;T&gt;()</code>.</p>
+<p>Reference: <a href="https://doc.rust-lang.org/std/str/trait.FromStr.html">std::str::FromStr -- Rust Standard Library</a></p>
+<h3 id="behavior-belongs-to-its-type"><a class="header" href="#behavior-belongs-to-its-type">Behavior belongs to its type</a></h3>
+<p><code>from_args</code> is a constructor method on <code>ServerArgs</code>, not a free function:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let config = ServerArgs::from_args(&amp;raw_args)?;
+<span class="boring">}</span></code></pre></pre>
+<p>The call site reads as intent. A free function <code>parse_args(&amp;raw_args)</code> says
+nothing about what it produces. The method form is self-documenting.</p>
+<h2 id="error-variants-1"><a class="header" href="#error-variants-1">Error variants</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Variant</th><th>Cause</th></tr></thead><tbody>
+<tr><td><code>UnknownFlag(String)</code></td><td>A <code>-x</code> token was not a recognized flag</td></tr>
+<tr><td><code>MissingValue(&amp;str)</code></td><td>A flag was present but no value followed</td></tr>
+<tr><td><code>InvalidValue { flag, raw }</code></td><td>A value could not be parsed as the expected type</td></tr>
+<tr><td><code>MissingFlag(&amp;str)</code></td><td>A required flag was absent</td></tr>
+<tr><td><code>NoTeamNames</code></td><td><code>-n</code> was present but no names followed</td></tr>
+<tr><td><code>ZeroValue(&amp;str)</code></td><td>A numeric flag resolved to zero</td></tr>
+</tbody></table>
+</div>
+<p>The first error encountered terminates the parse immediately. There is no
+error accumulation or partial success.</p>
+<h2 id="the--n-flag"><a class="header" href="#the--n-flag">The <code>-n</code> flag</a></h2>
+<p><code>-n</code> is the only variable-length flag. It collects all consecutive tokens that
+do not start with <code>-</code> as team names. Collection stops at the next flag or at
+end of input:</p>
+<pre><code class="language-bash"># Two team names collected, then -c recognized as the next flag
+zappy_server -n red blue -c 2 -p 4242 -x 10 -y 10 -f 100
+</code></pre>
+<p>Team names must not start with <code>-</code>. This matches the spec which treats team
+names as plain identifiers.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="design-patterns-reference"><a class="header" href="#design-patterns-reference">Design patterns reference</a></h1>
+<p>This chapter catalogs every design pattern used in the server, with definitions,
+rationale, and links to authoritative sources. Patterns are ordered by category.</p>
+<hr />
+<h2 id="architectural-patterns"><a class="header" href="#architectural-patterns">Architectural patterns</a></h2>
+<h3 id="hexagonal-architecture-ports-and-adapters"><a class="header" href="#hexagonal-architecture-ports-and-adapters">Hexagonal architecture (ports and adapters)</a></h3>
+<p><strong>What it is:</strong> The application core (domain) is surrounded by ports (interfaces)
+and adapters (implementations). The core never depends on infrastructure.</p>
+<p><strong>Where used:</strong> The entire server. <code>world/</code> imports nothing from <code>network/</code> or
+<code>protocol/</code>. The wire encoding for <code>Direction::North</code> (integer 1) lives
+exclusively in <code>protocol/gui/format/player.rs</code>.</p>
+<p><strong>Why:</strong> The domain can be tested, evolved, and reasoned about without any
+network or protocol setup. Tests for <code>World</code>, <code>Player</code>, and <code>Map</code> do not
+require a TCP socket.</p>
+<p><strong>Sources:</strong></p>
+<ul>
+<li><a href="https://alistair.cockburn.us/hexagonal-architecture/">Hexagonal Architecture -- Alistair Cockburn (2005)</a></li>
+<li><a href="https://herbertograca.com/2017/09/14/ports-adapters-architecture/">Ports and Adapters -- Herberto Graca (2017)</a></li>
+</ul>
+<hr />
+<h3 id="functional-core-imperative-shell-1"><a class="header" href="#functional-core-imperative-shell-1">Functional core, imperative shell</a></h3>
+<p><strong>What it is:</strong> Code is split into a pure inner core (no side effects) and an
+impure outer shell (I/O, mutation).</p>
+<p><strong>Where used:</strong> All three parsers and the GUI serializer are pure functions.
+<code>app.rs</code>, the reactor, and <code>utils/actions/</code> are the imperative shell.</p>
+<p><strong>Why:</strong> The pure core is trivially testable. The shell is small and clearly
+bounded. Bugs in the network layer cannot corrupt parser behavior.</p>
+<p><strong>Sources:</strong></p>
+<ul>
+<li><a href="https://www.destroyallsoftware.com/screencasts/catalog/functional-core-imperative-shell">Functional Core, Imperative Shell -- Gary Bernhardt (2012)</a></li>
+<li><a href="http://www.javiercasas.com/articles/functional-programming-patterns-functional-core-imperative-shell/">Patterns of Functional Programming -- Javier Casas</a></li>
+</ul>
+<hr />
+<h2 id="concurrency-and-io-patterns"><a class="header" href="#concurrency-and-io-patterns">Concurrency and I/O patterns</a></h2>
+<h3 id="reactor-pattern"><a class="header" href="#reactor-pattern">Reactor pattern</a></h3>
+<p><strong>What it is:</strong> A single thread demultiplexes I/O events using an OS poll
+facility and dispatches each event to a registered handler.</p>
+<p><strong>Where used:</strong> <code>server/src/network/reactor.rs</code>. One reactor manages all TCP
+connections and the game clock.</p>
+<p><strong>Why:</strong> Avoids one thread per client. Suitable for a game server with many
+idle GUI observers and a bounded number of AI players.</p>
+<p><strong>Sources:</strong></p>
+<ul>
+<li><a href="https://www.dre.vanderbilt.edu/~schmidt/PDF/reactor-siemens.pdf">Reactor: An Object Behavioral Pattern -- Douglas Schmidt (1995)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Reactor_pattern">Reactor Pattern -- Wikipedia</a></li>
+</ul>
+<hr />
+<h2 id="domain-patterns-ddd"><a class="header" href="#domain-patterns-ddd">Domain patterns (DDD)</a></h2>
+<h3 id="entity"><a class="header" href="#entity">Entity</a></h3>
+<p><strong>What it is:</strong> An object defined by its unique identity rather than its
+attribute values. Two entities with the same attributes but different ids are
+distinct.</p>
+<p><strong>Where used:</strong> <code>Player</code> (identified by <code>PlayerId</code>). The player struct has
+mutable state; its identity is stable across all mutations.</p>
+<p><strong>Sources:</strong></p>
+<ul>
+<li><a href="https://martinfowler.com/bliki/EvansClassification.html">Evans Classification -- Martin Fowler</a></li>
+<li><a href="https://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215">Domain-Driven Design -- Eric Evans (2003)</a></li>
+</ul>
+<hr />
+<h3 id="value-object"><a class="header" href="#value-object">Value object</a></h3>
+<p><strong>What it is:</strong> An object with no conceptual identity, defined entirely by its
+attribute values. Two value objects with the same attributes are interchangeable.</p>
+<p><strong>Where used:</strong></p>
+<ul>
+<li><code>Direction</code> (North/East/South/West -- derives <code>Copy</code>, methods return new values)</li>
+<li><code>Resources</code> (seven counters -- derives <code>Default</code>, <code>Clone</code>, <code>PartialEq</code>)</li>
+<li><code>Egg</code> (position + team name -- immutable after creation, removed rather than mutated)</li>
+</ul>
+<p><strong>Sources:</strong></p>
+<ul>
+<li><a href="https://martinfowler.com/bliki/EvansClassification.html">Evans Classification -- Martin Fowler</a></li>
+<li><a href="https://refactoring.guru/design-patterns/catalog">Value Object -- refactoring.guru</a></li>
+</ul>
+<hr />
+<h3 id="aggregate-root"><a class="header" href="#aggregate-root">Aggregate root</a></h3>
+<p><strong>What it is:</strong> A cluster of domain objects accessed through a single entry
+point that enforces all invariants for the cluster.</p>
+<p><strong>Where used:</strong> <code>World</code> is the aggregate root. All game state (map, players,
+eggs, teams) is accessed through one <code>World</code> instance. The event loop holds one
+exclusive mutable reference to <code>World</code>.</p>
+<p><strong>Sources:</strong></p>
+<ul>
+<li><a href="https://martinfowler.com/bliki/DDD_Aggregate.html">Aggregate -- Martin Fowler</a></li>
+</ul>
+<hr />
+<h3 id="domain-service-free-function"><a class="header" href="#domain-service-free-function">Domain service (free function)</a></h3>
+<p><strong>What it is:</strong> An operation that does not naturally belong to any single entity
+or value object, implemented as a free function.</p>
+<p><strong>Where used:</strong> <code>take_resource(tile, player, kind)</code> and
+<code>drop_resource(tile, player, kind)</code> operate on both a <code>Tile</code> and a <code>Player</code>.
+Placing this logic on either type would create an unwanted import dependency.</p>
+<p><strong>Sources:</strong></p>
+<ul>
+<li><a href="https://www.domainlanguage.com/ddd/reference/">Domain Service -- Domain-Driven Design Reference</a></li>
+</ul>
+<hr />
+<h2 id="behavioral-patterns"><a class="header" href="#behavioral-patterns">Behavioral patterns</a></h2>
+<h3 id="command-pattern"><a class="header" href="#command-pattern">Command pattern</a></h3>
+<p><strong>What it is:</strong> An operation is encapsulated as an object, enabling
+parameterization, queuing, and deferred execution.</p>
+<p><strong>Where used:</strong> <code>Action</code> enum. Each AI command is a first-class value stored
+in <code>ActionQueue</code>. <code>time_cost()</code> is a pure method on the value. Execution logic
+lives in <code>utils/actions/</code>, not in the action itself.</p>
+<p><strong>Sources:</strong></p>
+<ul>
+<li><a href="https://refactoring.guru/design-patterns/command">Command Pattern -- Refactoring Guru</a></li>
+<li><a href="https://www.amazon.com/Design-Patterns-Elements-Reusable-Object-Oriented/dp/0201633612">Command -- Gang of Four (1994)</a></li>
+</ul>
+<hr />
+<h2 id="parsing-patterns"><a class="header" href="#parsing-patterns">Parsing patterns</a></h2>
+<h3 id="parse-dont-validate-2"><a class="header" href="#parse-dont-validate-2">Parse, don't validate</a></h3>
+<p><strong>What it is:</strong> Instead of validating raw input and passing it alongside a trust
+assumption, parse it once into a type that makes invalid states unrepresentable.</p>
+<p><strong>Where used:</strong> Every parser in the server (<code>protocol::ai::parse</code>,
+<code>protocol::gui::parse</code>, <code>cli::ServerArgs::from_args</code>). The game engine never
+receives a raw string for a command or flag.</p>
+<p><strong>Sources:</strong></p>
+<ul>
+<li><a href="https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/">Parse, don't validate -- Alexis King (2019)</a></li>
+<li><a href="https://deviq.com/practices/parse-dont-validate/">Parse, Don't Validate -- DevIQ</a></li>
+</ul>
+<hr />
+<h3 id="ll1-predictive-parser-1"><a class="header" href="#ll1-predictive-parser-1">LL(1) predictive parser</a></h3>
+<p><strong>What it is:</strong> A top-down parser that reads one token of lookahead and
+immediately selects the correct production rule without backtracking.</p>
+<p><strong>Where used:</strong> <code>protocol::ai::parse</code>, <code>protocol::gui::parse</code>,
+<code>cli::ServerArgs::from_args</code>. The grammar of each protocol is flat and
+unambiguous; one lookahead token is always sufficient.</p>
+<p><strong>Sources:</strong></p>
+<ul>
+<li><a href="https://www.geeksforgeeks.org/compiler-design/classification-of-top-down-parsers/">Classification of Top Down Parsers -- GeeksforGeeks</a></li>
+<li><a href="https://pages.cs.wisc.edu/~hasti/cs536/readings/Topdown.html">LL(1) grammars -- UW Madison</a></li>
+</ul>
+<hr />
+<h3 id="zero-copy-cursor-1"><a class="header" href="#zero-copy-cursor-1">Zero-copy cursor</a></h3>
+<p><strong>What it is:</strong> A parser traverses input by advancing a reference or slice
+pointer, never allocating a copy of the underlying bytes.</p>
+<p><strong>Where used:</strong> <code>Tokens&lt;'a&gt;</code> in <code>protocol::ai::lexer</code> and
+<code>protocol::gui::lexer</code>. The lifetime <code>'a</code> ties returned tokens to the original
+input buffer.</p>
+<p><strong>Sources:</strong></p>
+<ul>
+<li><a href="https://itnext.io/rust-the-joy-of-safe-zero-copy-parsers-8c8581db8ab2">Rust: The joy of safe zero-copy parsers -- ITNEXT</a></li>
+<li><a href="https://oneuptime.com/blog/post/2026-01-30-rust-zero-copy-parsers/view">How to Create Zero-Copy Parsers in Rust -- OneUptime</a></li>
+</ul>
+<hr />
+<h2 id="structural-patterns"><a class="header" href="#structural-patterns">Structural patterns</a></h2>
+<h3 id="newtype-pattern-1"><a class="header" href="#newtype-pattern-1">Newtype pattern</a></h3>
+<p><strong>What it is:</strong> A single-field struct that wraps a primitive to create a
+distinct type with no runtime overhead.</p>
+<p><strong>Where used:</strong> <code>PlayerId(u32)</code>, <code>EggId(u32)</code>, <code>Token(usize)</code>. The compiler
+rejects passing a tile coordinate where a player id is expected.</p>
+<p><strong>Sources:</strong></p>
+<ul>
+<li><a href="https://doc.rust-lang.org/rust-by-example/generics/new_types.html">New Type Idiom -- Rust By Example</a></li>
+<li><a href="https://rust-unofficial.github.io/patterns/patterns/behavioural/newtype.html">Newtype -- Rust Design Patterns</a></li>
+<li><a href="https://www.lurklurk.org/effective-rust/newtype.html">Item 6: Embrace the newtype pattern -- Effective Rust</a></li>
+</ul>
+<hr />
+<h3 id="information-hiding-parnas-decomposition"><a class="header" href="#information-hiding-parnas-decomposition">Information hiding (Parnas decomposition)</a></h3>
+<p><strong>What it is:</strong> A module hides design decisions that are likely to change behind
+a stable interface. Only the interface is visible; internals are not.</p>
+<p><strong>Where used:</strong> <code>format/player.rs</code> and <code>format/world.rs</code> declare all helpers
+<code>pub(super)</code>. No code outside <code>format/mod.rs</code> can call them. The wire encoding
+for orientation integers and resource indices is a hidden implementation detail.</p>
+<p><strong>Sources:</strong></p>
+<ul>
+<li><a href="https://www.cs.cornell.edu/courses/JavaAndDS/files/infoHiding.pdf">On the criteria to be used in decomposing systems into modules -- David Parnas (1972)</a></li>
+<li><a href="https://doc.rust-lang.org/reference/visibility-and-privacy.html">Visibility and privacy -- The Rust Reference</a></li>
+</ul>
+<hr />
+<h2 id="memory-and-resource-management"><a class="header" href="#memory-and-resource-management">Memory and resource management</a></h2>
+<h3 id="raii-resource-acquisition-is-initialization"><a class="header" href="#raii-resource-acquisition-is-initialization">RAII (Resource Acquisition Is Initialization)</a></h3>
+<p><strong>What it is:</strong> A resource (memory, file descriptor, socket) is tied to the
+lifetime of a Rust value. Dropping the value releases the resource.</p>
+<p><strong>Where used:</strong> <code>Client</code> owns its <code>TcpStream</code>. When the <code>Client</code> is removed
+from the reactor's <code>HashMap</code>, Rust calls <code>Drop</code> on the <code>TcpStream</code>, closing
+the file descriptor automatically. No explicit <code>close</code> is needed; no socket
+can leak.</p>
+<p><strong>Sources:</strong></p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization">RAII -- Wikipedia</a></li>
+<li><a href="https://doc.rust-lang.org/rust-by-example/scope/raii.html">RAII -- Rust By Example</a></li>
+</ul>
+<hr />
+<h3 id="flat-buffer-contiguous-2d-storage"><a class="header" href="#flat-buffer-contiguous-2d-storage">Flat buffer (contiguous 2D storage)</a></h3>
+<p><strong>What it is:</strong> An N-dimensional array stored as a single contiguous block of
+memory, indexed by an arithmetic formula.</p>
+<p><strong>Where used:</strong> <code>Map</code> stores all tiles in a <code>Vec&lt;Tile&gt;</code> with the formula
+<code>index = y * width + x</code>. The alternative <code>Vec&lt;Vec&lt;Tile&gt;&gt;</code> has one extra
+indirection per row.</p>
+<p><strong>Sources:</strong></p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Row-_and_column-major_order">Row- and column-major order -- Wikipedia</a></li>
+</ul>
+<hr />
+<h2 id="rng"><a class="header" href="#rng">RNG</a></h2>
+<h3 id="linear-congruential-generator-lcg"><a class="header" href="#linear-congruential-generator-lcg">Linear congruential generator (LCG)</a></h3>
+<p><strong>What it is:</strong> A pseudo-random number generator defined by the recurrence
+<code>X_{n+1} = (a * X_n + c) mod m</code>, where a, c, m are carefully chosen constants.</p>
+<p><strong>Where used:</strong> <code>world::Rng</code> uses the Knuth MMIX constants. Two generators with
+the same seed produce identical sequences, making map initialization
+reproducible.</p>
+<p><strong>Sources:</strong></p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Linear_congruential_generator">Linear congruential generator -- Wikipedia</a></li>
+<li><a href="https://www-cs-faculty.stanford.edu/~knuth/taocp.html">Knuth, The Art of Computer Programming Vol. 2 -- Stanford</a></li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>
